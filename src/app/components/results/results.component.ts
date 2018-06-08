@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-results',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResultsComponent implements OnInit {
 
-  constructor() { }
+  query: string;
+
+  constructor(
+    private sharedService: SharedService
+  ) { 
+    this.query = "";
+  }
 
   ngOnInit() {
+    this.sharedService.changedQuery.subscribe(query => {
+      this.query = query;
+      this.search();
+    })
+  }
+
+  search() {
+    
   }
 
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
 
   routeLinks: any[];
-  activeLinkIndex = 0;
+  activeLinkIndex;
 
-  constructor() {
+  constructor(
+    private sharedService: SharedService
+  ) {
 
     this.routeLinks = [
       {
@@ -25,6 +28,13 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
+    this.activeLinkIndex = 0;
+
+  }
+
+  @HostListener('input', ['$event'])
+  input(e) {
+    this.sharedService.setQuery(e.target.value);
   }
 
   ngOnInit() {
