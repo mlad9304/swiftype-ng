@@ -13,6 +13,17 @@
         <mat-form-field>
           <input matInput placeholder="Search">
         </mat-form-field>
+        <nav mat-tab-nav-bar>
+          <a mat-tab-link
+            *ngFor="let routeLink of routeLinks; let i = index;"
+            
+            [active]="activeLinkIndex === i"
+            (click)="activeLinkIndex = i"
+          >
+            {{routeLink.label}}
+          </a>
+          <router-outlet></router-outlet>
+        </nav>
       </form>
                   
     </div>

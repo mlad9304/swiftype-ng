@@ -7,7 +7,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  routeLinks: any[];
+  activeLinkIndex = 0;
+
+  constructor() {
+
+    this.routeLinks = [
+      {
+        label: 'Web',
+        link: './',
+        index: 0
+      },
+      {
+        label: 'Images',
+        link: './',
+        index: 1
+      }
+    ];
+
+  }
 
   ngOnInit() {
   }
