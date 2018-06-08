@@ -1,0 +1,13 @@
+.top-banner {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    color: #fff;
+    background-color: green;
+    opacity: .5
+}
+
+.top-banner .top-banner-title {
+    position: relative;
+    top: 7px
+}

@@ -6,15 +6,19 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import { HeaderComponent } from './components/header/header.component';
+import { TopBannerComponent } from './components/top-banner/top-banner.component';
 
 const appRoutes: Routes = [
-  { path: 'home', component: HomeComponent }
+  { path: '', component: HomeComponent }
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    HeaderComponent,
+    TopBannerComponent
   ],
   imports: [
     BrowserModule,
