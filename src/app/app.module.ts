@@ -12,6 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FacetsComponent } from './components/facets/facets.component';
 import { ResultsComponent } from './components/results/results.component';
 
+import { SharedService } from './services/shared.service';
+
 const appRoutes: Routes = [
   { path: '', component: HomeComponent }
 ]
@@ -33,7 +35,7 @@ const appRoutes: Routes = [
     MatInputModule,
     MatTabsModule
   ],
-  providers: [],
+  providers: [SharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
