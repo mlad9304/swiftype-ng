@@ -12,13 +12,13 @@ export class SearchService {
     private http: Http
   ) { }
 
-  search(query) {
+  search(query, from, size, categorySize) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     return this.http.post('https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243/wiki/_search', {
-      "from": 0,
-      "size": 12,
+      "from": from,
+      "size": size,
       "aggs" : {
         "index" : {
           "terms" : { "field" : "_index" }
@@ -26,7 +26,7 @@ export class SearchService {
         "category" : {
           "terms" : { 
               "field" : "categories.keyword", 
-              "size" : 5
+              "size" : categorySize
           },            
         },
       },
