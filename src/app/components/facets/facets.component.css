@@ -1,0 +1,103 @@
+.close-facets {
+    visibility: hidden;
+    display: none
+}
+
+@media (max-width:960px) {
+    .close-facets{
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: rgba(34, 34, 34, .45)
+    }
+    .close-facets {
+        visibility: visible;
+        display: block;
+        top: 0;
+        right: 0
+    }
+    .close-facets i {
+        position: relative;
+        top: 10px;
+        left: 10px;
+        color: #ecf4f9
+    }
+}
+
+.facet-container {
+    font-size: 1rem;
+    margin: 0 0 2rem
+}
+
+.facet-header {
+    margin: 0 0 10px;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 30px;
+    font-size: .75em;
+    font-weight: 600;
+    color: rgba(0, 0, 0, .7);
+    text-transform: uppercase;
+    letter-spacing: .08em
+}
+
+.facet-option {
+    margin: 0 0 5px;
+    font-size: .85rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    font-weight: 400;
+    min-height: 20px
+}
+
+.facet-option .facet-label {
+    color: #536170;
+    cursor: pointer;
+    text-transform: capitalize
+}
+
+.facet-option .facet-label:hover {
+    color: #3257ec
+}
+
+.facet-option .facet-count {
+    color: #A5B4C4
+}
+
+.facet-option.selected .facet-label {
+    font-weight: 600;
+    color: #3257ec
+}
+
+md-checkbox {
+    margin: 0;
+    margin-bottom: 5px!important;
+    cursor: pointer;
+    padding: 0 3px 0 0
+}
+
+md-checkbox .md-container {
+    top: 37%!important
+}
+
+md-checkbox.md-checked.blue .md-icon {
+    background-color: #3257ec
+}

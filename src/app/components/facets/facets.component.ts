@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FacetsComponent implements OnInit {
 
+  categories: any[] = [];
+
   constructor() { }
 
   ngOnInit() {

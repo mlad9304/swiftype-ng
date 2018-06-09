@@ -5,16 +5,18 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 })
 export class SharedService {
 
-  query: string;
-
   @Output() changedQuery: EventEmitter<string> = new EventEmitter();
+  @Output() changedCategories: EventEmitter<any[]> = new EventEmitter();
 
   constructor() { 
-    this.query = "";
+    
   }
 
   setQuery(query) {
-    this.query = query;
-    this.changedQuery.emit(this.query);
+    this.changedQuery.emit(query);
+  }
+
+  setCategories(categories) {
+    this.changedCategories.emit(categories);
   }
 }

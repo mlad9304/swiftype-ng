@@ -1,3 +1,36 @@
-<p>
-  facets works!
-</p>
+<div class="close-facets">
+  <i class="material-icons md-28">
+      keyboard_arrow_left
+  </i>
+</div>
+<div class="facet-container" ng-if="isNotEmptyRecords">
+  <div class="facet-header">
+      <span>Categories</span>
+  </div>
+  <div class="facet-option selected" data-facet-value="all" ng-click="handleClickFacet($event, '_all')">
+      <span class="facet-label">All</span>
+      <span class="facet-count"></span>
+  </div>
+  <div *ngFor="let category of categories">
+      <div class="facet-option" ng-click="handleClickFacet($event, category.key)">
+          <span class="facet-label">{{category.key}}</span>
+          <span class="facet-count">{{category.doc_count}}</span>
+      </div>
+  </div>
+</div>
+<div class="facet-container" ng-if="isNotEmptyRecords">
+  <div class="facet-header">
+      <span>Multi Select Categories</span>
+  </div>
+  <div *ngFor="let category of categories">
+          
+      <div class="facet-option">
+          <!-- <md-checkbox md-no-ink aria-label="Checkbox No Ink" class="blue" 
+              ng-model="multiFacetsData[category.key]" ng-change="handleClickMultiFacet($event)">
+              <span class="facet-label">{{category.key}}</span>
+              
+          </md-checkbox> -->
+          <span class="facet-count">{{category.doc_count}}</span>
+      </div>
+  </div>
+</div>
