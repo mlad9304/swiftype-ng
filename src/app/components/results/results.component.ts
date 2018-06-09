@@ -38,34 +38,49 @@ export class ResultsComponent implements OnInit {
     })
   }
 
-  search() {
-    this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
-      
-      const { category: categoryData, index } = data.aggregations;
-      const { buckets: categories } = categoryData;
-      const { hits, total } = data.hits;
+  search(isReplaceReturnedFacets=true, callback=null) {
 
-      this.hits = hits;
-      this.total = total;
-      this.isNotEmptyRecords = this.total > 0;
-      this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
-      this.isInvalidPrevPage = this.from <= 0;
-      this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+    console.log(this.query);
+    if(this.query === '')
+      return;
+
+    this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
+      this.searchHandler(data, isReplaceReturnedFacets, callback);
     });
+  }
+
+  searchHandler(data, isReplaceReturnedFacets, callback) {
+    const { category: categoryData, index } = data.aggregations;
+    const { buckets: categories } = categoryData;
+    const { hits, total } = data.hits;
+
+    if(isReplaceReturnedFacets) {
+      this.sharedService.setCategories(categories);
+    }
+
+    this.hits = hits;
+    this.total = total;
+    this.isNotEmptyRecords = this.total > 0;
+    this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
+    this.isInvalidPrevPage = this.from <= 0;
+    this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+
+    if(callback)
+      callback();
   }
 
   prevPage() {
     this.from -= this.size;
-
-    ////////
-    this.search();
+    this.search(false);
   }
 
   nextPage() {
     this.from += this.size;
+    this.search(false);
+  }
 
-    ////////
-    this.search();
+  searchAndReplaceFacets() {
+
   }
 
 }
