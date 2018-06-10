@@ -36,7 +36,6 @@ export class FacetsComponent implements OnInit {
   }
 
   handleClickFacet(e, facetValue) {
-    
     this.isMultiFacetSelect = false;
     for(let val in this.multiFacetsData) {
       this.multiFacetsData[val] = false;
@@ -54,9 +53,9 @@ export class FacetsComponent implements OnInit {
       this.selectedFacetValue = facetValue;
     }
 
-    this.sharedService.selectFacetsEmitter({
-      
-
+    this.sharedService.selectSingleFacetsEmitter({
+      isFacetFilter: this.isFacetFilter,
+      selectedFacetValue: this.selectedFacetValue
     });
 
   }

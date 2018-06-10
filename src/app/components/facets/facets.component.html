@@ -7,7 +7,7 @@
   <div class="facet-header">
       <span>Categories</span>
   </div>
-  <div class="facet-option selected" data-facet-value="all" ng-click="handleClickFacet($event, '_all')">
+  <div class="facet-option selected" data-facet-value="all" (click)="handleClickFacet($event, '_all')">
       <span class="facet-label">All</span>
       <span class="facet-count"></span>
   </div>

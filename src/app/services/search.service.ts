@@ -42,4 +42,29 @@ export class SearchService {
       }
     }).map(res => res.json());
   }
+
+  searchWithFacets(query, from, size, categorySize, facets) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post('https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243/wiki/_search', {
+      "from": from,
+      "size": size,
+      "query": {
+        "bool" : {
+          "must" : {
+            "query_string" : {
+                "fields" : ["text"],
+                "query" : query
+            }
+          },
+          "filter":{
+            "terms":{
+              "categories.keyword": facets
+            }
+          }
+        }
+      }
+    }).map(res => res.json());
+  }
 }

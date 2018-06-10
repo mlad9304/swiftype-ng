@@ -35,6 +35,16 @@ export class ResultsComponent implements OnInit {
     this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
       this.search();
+    });
+
+    this.sharedService.selectSingleFacet.subscribe(facet => {
+      const { isFacetFilter, selectedFacetValue } = facet;
+      if(isFacetFilter) {
+        this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, [selectedFacetValue]).subscribe(data => {
+          console.log(data);
+          this.searchHandler(data, false, null);
+        });
+      }
     })
   }
 

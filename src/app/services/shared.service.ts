@@ -7,7 +7,7 @@ export class SharedService {
 
   @Output() changedQuery: EventEmitter<string> = new EventEmitter();
   @Output() changedCategories: EventEmitter<any[]> = new EventEmitter();
-  @Output() selectFacets: EventEmitter<any> = new EventEmitter();
+  @Output() selectSingleFacet: EventEmitter<any> = new EventEmitter();
 
   constructor() { 
     
@@ -21,7 +21,7 @@ export class SharedService {
     this.changedCategories.emit(categories);
   }
 
-  selectFacetsEmitter(selectedFacets) {
-    this.selectFacets.emit(selectedFacets);
+  selectSingleFacetsEmitter(facet) {
+    this.selectSingleFacet.emit(facet);
   }
 }
