@@ -6,17 +6,24 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 export class SharedService {
 
   @Output() changedQuery: EventEmitter<string> = new EventEmitter();
+  @Output() setQuery: EventEmitter<string> = new EventEmitter();
   @Output() changedCategories: EventEmitter<any[]> = new EventEmitter();
   @Output() selectSingleFacet: EventEmitter<any> = new EventEmitter();
   @Output() selectMultiFacets: EventEmitter<any> = new EventEmitter();
+  @Output() setMultiFacetsData: EventEmitter<any> = new EventEmitter();
   @Output() goto: EventEmitter<number> = new EventEmitter();
+  @Output() setNavIndex: EventEmitter<number> = new EventEmitter();
 
   constructor() { 
     
   }
 
-  setQuery(query) {
+  changedQueryEmitter(query) {
     this.changedQuery.emit(query);
+  }
+
+  setQueryEmitter(query) {
+    this.setQuery.emit(query);
   }
 
   setCategories(categories) {
@@ -31,7 +38,15 @@ export class SharedService {
     this.selectMultiFacets.emit(facets);
   }
 
+  setMultiFacetsDataEmitter(facets) {
+    this.setMultiFacetsData.emit(facets);
+  }
+
   gotoEmitter(index) {
     this.goto.emit(index);
+  }
+
+  setNavIndexEmitter(index) {
+    this.setNavIndex.emit(index);
   }
 }

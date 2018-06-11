@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { query } from '@angular/animations';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,8 @@ export class HeaderComponent implements OnInit {
   isLogged = false;
   nickname = "";
   email = "";
+
+  query: string = "";
 
   constructor(
     private sharedService: SharedService,
@@ -38,7 +41,8 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('input', ['$event'])
   input(e) {
-    this.sharedService.setQuery(e.target.value);
+    this.query = e.target.value;
+    this.sharedService.changedQueryEmitter(this.query);
   }
 
   ngOnInit() {
@@ -52,6 +56,14 @@ export class HeaderComponent implements OnInit {
 
     this.sharedService.changedQuery.subscribe(query => {
       this.activeLinkIndex = 0; //Web
+    });
+
+    this.sharedService.setQuery.subscribe(query => {
+      this.query = query;
+    });
+
+    this.sharedService.setNavIndex.subscribe(index => {
+      this.activeLinkIndex = index;
     })
   }
 

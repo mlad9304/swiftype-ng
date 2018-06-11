@@ -47,6 +47,14 @@ export class FacetsComponent implements OnInit {
 
     this.sharedService.changedQuery.subscribe(query => {
       this.initFacets();
+    });
+
+    this.sharedService.setMultiFacetsData.subscribe(facets => {
+      this.isMultiFacetSelect = true;
+      this.selectedMultiFacets = facets;
+      this.multiFacetsData = {};
+      for(let val in facets)
+        this.multiFacetsData[facets[val]] = true;
     })
   }
 

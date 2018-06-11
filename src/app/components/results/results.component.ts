@@ -3,6 +3,9 @@ import { SharedService } from '../../services/shared.service';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
@@ -149,7 +152,7 @@ export class ResultsComponent implements OnInit {
 
       if(this.isFacetFilter) {
         this.searchService.searchWithFacets(this.query, this.from, this.size, this.selectedFacets).subscribe(data => {
-          this.searchHandler2(data);
+          this.searchHandler2(data);            
         });
       } else {
         this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
@@ -223,6 +226,82 @@ export class ResultsComponent implements OnInit {
   nextPageSavedsearches() {
     this.from_savedsearches += this.size_savedsearches;
     this.searchSavedSearches();
+  }
+
+  viewSearches(item) {
+
+    this.query = item._source.query;
+    this.sharedService.setQueryEmitter(this.query);
+    let isMultiFacetSelect = item._source.is_multi_facet_select;
+
+    this.from = 0;
+    this.isFacetFilter = item._source.categories.length === 0 ? false : true;
+    this.isSavedSearches = false;
+    this.selectedFacets = item._source.categories;
+
+    this.sharedService.setNavIndexEmitter(0); // Web
+
+    this.isMySaves = false;
+    this.isMySavedSearches = false;
+
+    this.searchService.searchWithAggsAndFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+      this.searchHandler(data, true, () => {
+        if(isMultiFacetSelect) {
+          setTimeout(() => {
+            $("div.facet-container").find(".facet-option").removeClass('selected');
+          }, 100);
+          
+          this.sharedService.setMultiFacetsDataEmitter(this.selectedFacets);
+        }
+        else {
+          if(this.isFacetFilter) {
+
+            const { category: categoryData } = data.aggregations;
+            const { buckets: categories } = categoryData;
+            let selectedFacetValue = item._source.categories[0];
+
+            let i;
+            for(i=0; i<categories.length; i++) {
+                if(categories[i].key == selectedFacetValue)
+                    break;
+            }
+            
+            setTimeout(() => {
+                $("div.facet-container").find(".facet-option").removeClass('selected');
+                $('div.facet-container:first .facet-option').eq(i+1).addClass('selected');
+            }, 100);
+          }
+        }
+      });
+    })
+
+    // $scope.search(true, () => {
+    //   $scope.multiFacetsData = {};
+
+    //   if($scope.isFacetFilter) {
+    //       if($scope.isMultiFacetSelect) {
+    //           for(let val in $scope.selectedMultiFacets)
+    //               $scope.multiFacetsData[$scope.selectedMultiFacets[val]] = true;
+
+    //           $("div.facet-container").find(".facet-option").removeClass('selected');
+    //       } else {
+    //           if($scope.selectedFacetValue !== undefined && $scope.selectedFacetValue !== '') {
+                  
+    //               let i;
+    //               for(i=0; i<$scope.categories.length; i++) {
+    //                   if($scope.categories[i].key == $scope.selectedFacetValue)
+    //                       break;
+    //               }
+                  
+    //               setTimeout(() => {
+    //                   $("div.facet-container").find(".facet-option").removeClass('selected');
+    //                   $('div.facet-container:first .facet-option').eq(i+1).addClass('selected');
+    //               }, 100);
+    //           }
+    //       }
+    //   }
+    // });
+
   }
 
 }
