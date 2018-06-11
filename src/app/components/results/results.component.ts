@@ -26,6 +26,9 @@ export class ResultsComponent implements OnInit {
   isInvalidPrevPage: boolean = false;
   isInvalidNextPage: boolean = false;
 
+  isFacetFilter = false;
+  selectedFacets: string[] = [];
+
   constructor(
     private sharedService: SharedService,
     private searchService: SearchService,
@@ -39,13 +42,36 @@ export class ResultsComponent implements OnInit {
 
     this.sharedService.selectSingleFacet.subscribe(facet => {
       const { isFacetFilter, selectedFacetValue } = facet;
-      if(isFacetFilter) {
+
+      this.isFacetFilter = isFacetFilter;
+      this.selectedFacets = [selectedFacetValue];
+      this.from = 0;
+
+      if(this.isFacetFilter) {
         this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, [selectedFacetValue]).subscribe(data => {
-          console.log(data);
-          this.searchHandler(data, false, null);
+          this.searchHandler2(data);
+        });
+      } else {
+        this.search(false);
+      }
+    });
+
+    this.sharedService.selectMultiFacets.subscribe(facets => {
+      const { selectedMultiFacets } = facets;
+
+      this.selectedFacets = selectedMultiFacets;
+      this.from = 0;
+
+      if(selectedMultiFacets.length === 0) {
+        this.isFacetFilter = false;
+        this.search(false);
+      } else {
+        this.isFacetFilter = true;
+        this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, selectedMultiFacets).subscribe(data => {
+          this.searchHandler2(data);
         });
       }
-    })
+    });
   }
 
   search(isReplaceReturnedFacets=true, callback=null) {
@@ -79,6 +105,17 @@ export class ResultsComponent implements OnInit {
       callback();
   }
 
+  searchHandler2(searchResult) {
+    const { hits, total } = searchResult.hits;
+
+    this.hits = hits;
+    this.total = total;
+    this.isNotEmptyRecords = this.total > 0;
+    this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
+    this.isInvalidPrevPage = this.from <= 0;
+    this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+  }
+
   prevPage() {
     this.from -= this.size;
     this.search(false);
@@ -87,10 +124,6 @@ export class ResultsComponent implements OnInit {
   nextPage() {
     this.from += this.size;
     this.search(false);
-  }
-
-  searchAndReplaceFacets() {
-
   }
 
 }

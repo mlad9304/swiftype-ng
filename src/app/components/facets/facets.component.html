@@ -3,7 +3,7 @@
       keyboard_arrow_left
   </i>
 </div>
-<div class="facet-container" ng-if="isNotEmptyRecords">
+<div class="facet-container" *ngIf="isNotEmptyFacets">
   <div class="facet-header">
       <span>Categories</span>
   </div>
@@ -18,19 +18,14 @@
       </div>
   </div>
 </div>
-<div class="facet-container" ng-if="isNotEmptyRecords">
+<div class="facet-container" *ngIf="isNotEmptyFacets">
   <div class="facet-header">
       <span>Multi Select Categories</span>
   </div>
   <div *ngFor="let category of categories">
           
       <div class="facet-option">
-          <!-- <md-checkbox md-no-ink aria-label="Checkbox No Ink" class="blue" 
-              ng-model="multiFacetsData[category.key]" ng-change="handleClickMultiFacet($event)">
-              <span class="facet-label">{{category.key}}</span>
-              
-          </md-checkbox> -->
-          <mat-checkbox>{{category.key}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="multiFacetsData[category.key]" (ngModelChange)="handleClickMultiFacet($event)">{{category.key}}</mat-checkbox>
           <span class="facet-count">{{category.doc_count}}</span>
       </div>
   </div>

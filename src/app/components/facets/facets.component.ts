@@ -11,6 +11,8 @@ declare var $: any;
 })
 export class FacetsComponent implements OnInit {
 
+  isNotEmptyFacets = false;
+
   categories: any[] = [];
   multiFacetsData: any = {};
 
@@ -26,6 +28,11 @@ export class FacetsComponent implements OnInit {
   ngOnInit() {
     this.sharedService.changedCategories.subscribe(categories => {
       this.categories = categories;
+
+      if(this.categories.length > 0)
+        this.isNotEmptyFacets = true;
+      else
+        this.isNotEmptyFacets = false;
 
       for(let i=0; i<categories.length; i++) {
         this.multiFacetsData[categories[i].key] = false;
@@ -58,6 +65,21 @@ export class FacetsComponent implements OnInit {
       selectedFacetValue: this.selectedFacetValue
     });
 
+  }
+
+  handleClickMultiFacet() {
+    this.isMultiFacetSelect = true;
+    $("div.facet-container").find(".facet-option").removeClass('selected');
+
+    this.selectedMultiFacets = [];
+    for(let val in this.multiFacetsData) {
+      if(this.multiFacetsData[val])
+        this.selectedMultiFacets.push(val);
+    }
+
+    this.sharedService.selectMultiFacetsEmitter({
+      selectedMultiFacets: this.selectedMultiFacets
+    })
   }
 
 }

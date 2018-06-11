@@ -16,12 +16,9 @@
                 </i> <span style="position: relative; top: -8px;">saved</span>
             </span>
         </span>
-        <div class="filter-label-container" *ngIf="!isMultiFacetSelect">
-            <span class="filter-label" *ngIf="isFacetFilter"><span><strong>Category:</strong> {{selectedFacetValue}}</span></span>
+        <div class="filter-label-container" *ngIf="isFacetFilter">
+            <span *ngFor="let facet of selectedFacets" class="filter-label"><span><strong>Category:</strong> {{facet}}</span></span>
         </div>
-        <!-- <div class="filter-label-container" *ngIf="isMultiFacetSelect">
-            <span *ngFor="(facetValue, facetFlag) in multiFacetsData" *ngIf="facetFlag" class="filter-label"><span><strong>Category:</strong> {{facetValue}}</span></span>
-        </div> -->
         <div style="clear:both;"></div>
     </div>
     <ul style="padding-left: 0">
