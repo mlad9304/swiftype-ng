@@ -69,4 +69,58 @@ export class SearchService {
       }
     }).map(res => res.json());
   }
+
+  searchMySaves(user, from, size, categorySize) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(`${environment.SERVER_URL}/saveddoc/_search`, {
+      "from": from,
+      "size": size,
+      "aggs" : {
+        "index" : {
+          "terms" : { "field" : "_index" }
+        },
+        "category" : {
+          "terms" : { 
+              "field" : "categories.keyword", 
+              "size" : categorySize
+          },            
+        },
+      },
+      "query": {
+        "bool" : {
+          "must" : {
+            "match": {
+              "user": user
+            }
+          },
+        }
+      }
+    }).map(res => res.json());
+  }
+
+  searchMySavesWithFacets(user, from, size, categorySize, facets) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(`${environment.SERVER_URL}/saveddoc/_search`, {
+      "from": from,
+      "size": size,
+      "query": {
+        "bool" : {
+          "must" : {
+            "match": {
+              "user": user
+            }
+          },
+          "filter":{
+            "terms":{
+              "categories.keyword": facets
+            }
+          }
+        }
+      }
+    }).map(res => res.json());
+  }
 }

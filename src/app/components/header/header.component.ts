@@ -48,6 +48,10 @@ export class HeaderComponent implements OnInit {
         this.nickname = profile.nickname;
         this.email = profile.name;
       }
+    });
+
+    this.sharedService.changedQuery.subscribe(query => {
+      this.activeLinkIndex = 0; //Web
     })
   }
 

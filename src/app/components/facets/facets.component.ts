@@ -44,6 +44,10 @@ export class FacetsComponent implements OnInit {
     this.sharedService.goto.subscribe(index => {
       this.initFacets();
     });
+
+    this.sharedService.changedQuery.subscribe(query => {
+      this.initFacets();
+    })
   }
 
   initFacets() {

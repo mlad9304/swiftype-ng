@@ -11,6 +11,8 @@ import { AuthService } from '../../services/auth.service';
 export class ResultsComponent implements OnInit {
 
   isLogged: boolean = false;
+  user: string = "";
+
   isMySaves: boolean = false;
   isMySavedSearches: boolean = false;
   isSaved: boolean = false;
@@ -44,8 +46,10 @@ export class ResultsComponent implements OnInit {
   ngOnInit() {
 
     this.authService.getProfile((err, profile) => {
-      if(profile)
+      if(profile) {
         this.isLogged = true;
+        this.user = profile.sub.substr(6);
+      }
     });
 
     this.authService.logout.subscribe(data => {
@@ -54,6 +58,14 @@ export class ResultsComponent implements OnInit {
 
     this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
+
+      this.from = 0;
+      this.isFacetFilter = false;
+      this.selectedFacets = [];
+      this.isSavedSearches = false;
+      this.isMySaves = false;
+      this.isMySavedSearches = false;
+
       this.search();
     });
 
@@ -64,13 +76,7 @@ export class ResultsComponent implements OnInit {
       this.selectedFacets = [selectedFacetValue];
       this.from = 0;
 
-      if(this.isFacetFilter) {
-        this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, [selectedFacetValue]).subscribe(data => {
-          this.searchHandler2(data);
-        });
-      } else {
-        this.search(false);
-      }
+      this.search(false);
     });
 
     this.sharedService.selectMultiFacets.subscribe(facets => {
@@ -79,15 +85,12 @@ export class ResultsComponent implements OnInit {
       this.selectedFacets = selectedMultiFacets;
       this.from = 0;
 
-      if(selectedMultiFacets.length === 0) {
+      if(selectedMultiFacets.length === 0)
         this.isFacetFilter = false;
-        this.search(false);
-      } else {
+      else
         this.isFacetFilter = true;
-        this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, selectedMultiFacets).subscribe(data => {
-          this.searchHandler2(data);
-        });
-      }
+
+      this.search(false);
     });
 
     this.sharedService.goto.subscribe(index => {
@@ -119,13 +122,35 @@ export class ResultsComponent implements OnInit {
 
   search(isReplaceReturnedFacets=true, callback=null) {
 
-    console.log(this.query);
-    if(this.query === '')
-      return;
+    if(this.isMySaves) {
+      if(this.isFacetFilter) {
+        this.searchService.searchMySavesWithFacets(this.user, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+          this.searchHandler2(data);
+        });
+      } else {
+        this.searchService.searchMySaves(this.user, this.from, this.size, this.categorySize).subscribe(data => {
+          this.searchHandler(data, isReplaceReturnedFacets, callback);
+        });
+      }
+      
+    } else {
 
-    this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
-      this.searchHandler(data, isReplaceReturnedFacets, callback);
-    });
+      console.log(this.query);
+      if(this.query === '')
+        return;
+
+      if(this.isFacetFilter) {
+        this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+          this.searchHandler2(data);
+        });
+      } else {
+        this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
+          this.searchHandler(data, isReplaceReturnedFacets, callback);
+        });
+      }
+      
+    }
+    
   }
 
   searchHandler(data, isReplaceReturnedFacets, callback) {
@@ -160,7 +185,7 @@ export class ResultsComponent implements OnInit {
   }
 
   searchSavedSearches() {
-
+    
   }
 
   prevPage() {
