@@ -45,7 +45,7 @@ export class SearchService {
     }).map(res => res.json());
   }
 
-  searchWithFacets(query, from, size, categorySize, facets) {
+  searchWithFacets(query, from, size, facets) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -100,7 +100,7 @@ export class SearchService {
     }).map(res => res.json());
   }
 
-  searchMySavesWithFacets(user, from, size, categorySize, facets) {
+  searchMySavesWithFacets(user, from, size, facets) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -119,6 +119,25 @@ export class SearchService {
               "categories.keyword": facets
             }
           }
+        }
+      }
+    }).map(res => res.json());
+  }
+
+  searchSavedSearches(user, from, size) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(`${environment.SERVER_URL}/savedsearch/_search`, {
+      "from": from,
+      "size": size,
+      "query": {
+        "bool":{
+          "must": {
+            "match": {
+              "user": user
+            }
+          },
         }
       }
     }).map(res => res.json());

@@ -1,45 +1,78 @@
-<div>
-    <div *ngIf="isNotEmptyRecords" class="search-summary">
-        <div class="search-summary-label" *ngIf="isMySaves">
-            Saved results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong>
-        </div>
-        <div class="search-summary-label" *ngIf="!isMySaves">
-            Showing results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong> for <em [innerHtml]="query"></em>
-        </div>
-        <span class="saved_searches" *ngIf="isLogged && !isMySaves">
-            <i class="material-icons" ng-click="onSaveSearches($event)" *ngIf="!isSavedSearches">
-                save_alt
-            </i>
-            <span *ngIf="isSavedSearches">
-                <i class="material-icons">
-                    check
-                </i> <span style="position: relative; top: -8px;">saved</span>
+<div *ngIf="!isMySavedSearches">
+    <div>
+        <div *ngIf="isNotEmptyRecords" class="search-summary">
+            <div class="search-summary-label" *ngIf="isMySaves">
+                Saved results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong>
+            </div>
+            <div class="search-summary-label" *ngIf="!isMySaves">
+                Showing results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong> for <em [innerHtml]="query"></em>
+            </div>
+            <span class="saved_searches" *ngIf="isLogged && !isMySaves">
+                <i class="material-icons" ng-click="onSaveSearches($event)" *ngIf="!isSavedSearches">
+                    save_alt
+                </i>
+                <span *ngIf="isSavedSearches">
+                    <i class="material-icons">
+                        check
+                    </i> <span style="position: relative; top: -8px;">saved</span>
+                </span>
             </span>
-        </span>
-        <div class="filter-label-container" *ngIf="isFacetFilter">
-            <span *ngFor="let facet of selectedFacets" class="filter-label"><span><strong>Category:</strong> {{facet}}</span></span>
+            <div class="filter-label-container" *ngIf="isFacetFilter">
+                <span *ngFor="let facet of selectedFacets" class="filter-label"><span><strong>Category:</strong> {{facet}}</span></span>
+            </div>
+            <div style="clear:both;"></div>
         </div>
-        <div style="clear:both;"></div>
+        <ul style="padding-left: 0">
+            <li *ngFor="let record of hits" class="result" style="padding: 1rem; position: relative; list-style-type: none;">
+                <div class="result-title">
+                    {{record._source.title}}
+                </div>
+                <div class="result-description mt-10 mb-0" style="border-left: 1px solid #DAE2EB; padding-left: 8px; height: 40px">
+                    <p [innerHtml]="record._source.text"></p>
+                </div>
+                <div class="save-button-container" ng-click="removeResult(record)" *ngIf="isLogged && isMySaves" style="bottom: 10px !important;">
+                    <i class="save-button fa fa-trash"></i>
+                </div>
+                <div class="save-button-container" ng-click="saveResult(record)" *ngIf="isLogged && !isMySaves" style="bottom: 10px !important;">
+                    <span class="save-button" *ngIf="!record.isSaved">+</span>
+                    <i class="save-button fa fa-check" *ngIf="record.isSaved"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="isNotEmptyRecords" class="pagination" style="display: block;">
+        <span class="previous_page" [ngClass]="{disabled: isInvalidPrevPage}" (click)="prevPage()">Previous</span>
+        <span class="next_page" [ngClass]="{disabled: isInvalidNextPage}" (click)="nextPage()">Next</span>
+    </div>
+</div>
+<div *ngIf="isMySavedSearches">
+    <div *ngIf="isNotEmptyRecords_savedsearches" class="search-summary">
+        <div class="search-summary-label">
+            Saved searches <strong [innerHtml]="page_row_count_summary_savedsearches"></strong> of <strong [innerHtml]="total_savedsearches"></strong>
+        </div>
     </div>
     <ul style="padding-left: 0">
-        <li *ngFor="let record of hits" class="result" style="padding: 1rem; position: relative; list-style-type: none;">
+        <li *ngFor="let record of hits_savedsearches" class="result" style="padding: 1rem; position: relative; list-style-type: none;">
             <div class="result-title">
-                {{record._source.title}}
+                {{record._source.query}}
             </div>
-            <div class="result-description mt-10 mb-0" style="border-left: 1px solid #DAE2EB; padding-left: 8px; height: 40px">
-                <p [innerHtml]="record._source.text"></p>
+            <div class="result-description pt-4 h-inherit mt-10 mb-0" style="border-left: 1px solid #DAE2EB; padding-left: 8px; height: 40px">
+                <div class="filter-label-container">
+                    <span *ngFor="let category of record._source.categories" class="filter-label"><span><strong>Category:</strong> {{category}}</span></span>
+                </div>
             </div>
-            <div class="save-button-container" ng-click="removeResult(record)" *ngIf="isLogged && isMySaves" style="bottom: 10px !important;">
+            
+            <div class="save-button-container" (click)="viewSearches(record)" *ngIf="isLogged" style="bottom: 10px !important;right: 50px;">
+                <i class="save-button material-icons">visibility</i>
+            </div>
+            <div class="save-button-container" (click)="removeSearches(record)" *ngIf="isLogged" style="bottom: 10px !important;">
                 <i class="save-button fa fa-trash"></i>
-            </div>
-            <div class="save-button-container" ng-click="saveResult(record)" *ngIf="isLogged && !isMySaves" style="bottom: 10px !important;">
-                <span class="save-button" *ngIf="!record.isSaved">+</span>
-                <i class="save-button fa fa-check" *ngIf="record.isSaved"></i>
-            </div>
+            </div>                        
+            
         </li>
     </ul>
-</div>
-<div *ngIf="isNotEmptyRecords" class="pagination" style="display: block;">
-    <span class="previous_page" [ngClass]="{disabled: isInvalidPrevPage}" (click)="prevPage()">Previous</span>
-    <span class="next_page" [ngClass]="{disabled: isInvalidNextPage}" (click)="nextPage()">Next</span>
+    <div *ngIf="isNotEmptyRecords_savedsearches" class="pagination" style="display: block;">
+        <span class="previous_page" [ngClass]="{disabled: isInvalidPrevPage_savedsearches}" (click)="prevPageSavedsearches()">Previous</span>
+        <span class="next_page" [ngClass]="{disabled: isInvalidNextPage_savedsearches}" (click)="nextPageSavedsearches()">Next</span>
+    </div>
 </div>

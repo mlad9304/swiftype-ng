@@ -24,9 +24,6 @@ export class ResultsComponent implements OnInit {
   size: number = 12;
   categorySize: number = 5;
 
-  from_savedsearches: number = 0;
-  size_savedsearches: number = 12;
-
   hits: any[] = [];
   total: number = 0;
   isNotEmptyRecords: boolean = false;
@@ -36,6 +33,17 @@ export class ResultsComponent implements OnInit {
 
   isFacetFilter = false;
   selectedFacets: string[] = [];
+
+  from_savedsearches: number = 0;
+  size_savedsearches: number = 12;
+
+  hits_savedsearches: any[] = [];
+  total_savedsearches: number = 0;
+  isNotEmptyRecords_savedsearches: boolean = false;
+  page_row_count_summary_savedsearches: string = "";
+  isInvalidPrevPage_savedsearches: boolean = false;
+  isInvalidNextPage_savedsearches: boolean = false;
+
 
   constructor(
     private sharedService: SharedService,
@@ -101,18 +109,18 @@ export class ResultsComponent implements OnInit {
 
       this.from_savedsearches = 0;
 
-      if(index === 2) { // Saved Results
-        this.isMySaves = true;
-      } else {
-        this.isMySaves = false;
-      }
-
-      if(index === 3) { // Saved Searches
+      if(index === 2) { // Saved Searches
         this.isMySavedSearches = true;
         this.searchSavedSearches();
         return;
       } else {
         this.isMySavedSearches = false;
+      }
+
+      if(index === 3) { // Saved Results
+        this.isMySaves = true;
+      } else {
+        this.isMySaves = false;
       }
 
       this.search();
@@ -124,7 +132,7 @@ export class ResultsComponent implements OnInit {
 
     if(this.isMySaves) {
       if(this.isFacetFilter) {
-        this.searchService.searchMySavesWithFacets(this.user, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+        this.searchService.searchMySavesWithFacets(this.user, this.from, this.size, this.selectedFacets).subscribe(data => {
           this.searchHandler2(data);
         });
       } else {
@@ -140,7 +148,7 @@ export class ResultsComponent implements OnInit {
         return;
 
       if(this.isFacetFilter) {
-        this.searchService.searchWithFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+        this.searchService.searchWithFacets(this.query, this.from, this.size, this.selectedFacets).subscribe(data => {
           this.searchHandler2(data);
         });
       } else {
@@ -185,7 +193,17 @@ export class ResultsComponent implements OnInit {
   }
 
   searchSavedSearches() {
-    
+    this.searchService.searchSavedSearches(this.user, this.from_savedsearches, this.size_savedsearches).subscribe(data => {
+      const { hits, total } = data.hits;
+
+      this.hits_savedsearches = hits;
+      this.total_savedsearches = total;
+
+      this.isNotEmptyRecords_savedsearches = this.total_savedsearches > 0;
+      this.page_row_count_summary_savedsearches = (this.from_savedsearches + 1) + '-' + (this.from_savedsearches + this.hits_savedsearches.length);
+      this.isInvalidPrevPage_savedsearches = this.from_savedsearches <= 0;
+      this.isInvalidNextPage_savedsearches = (this.from_savedsearches + this.hits_savedsearches.length) >= this.total_savedsearches;
+    });
   }
 
   prevPage() {
@@ -196,6 +214,15 @@ export class ResultsComponent implements OnInit {
   nextPage() {
     this.from += this.size;
     this.search(false);
+  }
+
+  prevPageSavedsearches() {
+    this.from_savedsearches -= this.size_savedsearches;
+    this.searchSavedSearches();
+  }
+  nextPageSavedsearches() {
+    this.from_savedsearches += this.size_savedsearches;
+    this.searchSavedSearches();
   }
 
 }
