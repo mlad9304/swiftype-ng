@@ -10,15 +10,20 @@ import { AuthService } from '../../services/auth.service';
 })
 export class ResultsComponent implements OnInit {
 
+  isLogged: boolean = false;
   isMySaves: boolean = false;
   isMySavedSearches: boolean = false;
-  isLogged: boolean = false;
+  isSaved: boolean = false;
+  isSavedSearches: boolean = false;
+
+  query: string = "";
 
   from: number = 0;
   size: number = 12;
   categorySize: number = 5;
 
-  query: string = "";
+  from_savedsearches: number = 0;
+  size_savedsearches: number = 12;
 
   hits: any[] = [];
   total: number = 0;
@@ -84,6 +89,32 @@ export class ResultsComponent implements OnInit {
         });
       }
     });
+
+    this.sharedService.goto.subscribe(index => {
+      this.from = 0;
+      this.isFacetFilter = false;
+      this.selectedFacets = [];
+      this.isSavedSearches = false;
+
+      this.from_savedsearches = 0;
+
+      if(index === 2) { // Saved Results
+        this.isMySaves = true;
+      } else {
+        this.isMySaves = false;
+      }
+
+      if(index === 3) { // Saved Searches
+        this.isMySavedSearches = true;
+        this.searchSavedSearches();
+        return;
+      } else {
+        this.isMySavedSearches = false;
+      }
+
+      this.search();
+
+    });
   }
 
   search(isReplaceReturnedFacets=true, callback=null) {
@@ -126,6 +157,10 @@ export class ResultsComponent implements OnInit {
     this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
     this.isInvalidPrevPage = this.from <= 0;
     this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+  }
+
+  searchSavedSearches() {
+
   }
 
   prevPage() {

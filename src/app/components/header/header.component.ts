@@ -10,8 +10,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class HeaderComponent implements OnInit {
 
-  routeLinks: any[];
-  activeLinkIndex;
+  headerNavs: any[];
+  activeLinkIndex = 0;
 
   isLogged = false;
   nickname = "";
@@ -23,20 +23,16 @@ export class HeaderComponent implements OnInit {
     public dialog: MatDialog
   ) {
 
-    this.routeLinks = [
+    this.headerNavs = [
       {
         label: 'Web',
-        link: './',
         index: 0
       },
       {
         label: 'Images',
-        link: './',
         index: 1
       }
     ];
-
-    this.activeLinkIndex = 0;
 
   }
 
@@ -64,6 +60,11 @@ export class HeaderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       
     });
+  }
+
+  goto(index) {
+    this.activeLinkIndex = index;
+    this.sharedService.gotoEmitter(this.activeLinkIndex);
   }
 
   logout() {

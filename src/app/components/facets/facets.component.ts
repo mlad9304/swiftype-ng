@@ -40,6 +40,20 @@ export class FacetsComponent implements OnInit {
 
       $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');
     });
+
+    this.sharedService.goto.subscribe(index => {
+      this.initFacets();
+    });
+  }
+
+  initFacets() {
+    this.isFacetFilter = false;
+    this.isMultiFacetSelect = false;
+
+    for(let val in this.multiFacetsData)
+      this.multiFacetsData[val] = false;
+    this.selectedMultiFacets = [];
+    
   }
 
   handleClickFacet(e, facetValue) {

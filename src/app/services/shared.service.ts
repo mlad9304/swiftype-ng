@@ -9,6 +9,7 @@ export class SharedService {
   @Output() changedCategories: EventEmitter<any[]> = new EventEmitter();
   @Output() selectSingleFacet: EventEmitter<any> = new EventEmitter();
   @Output() selectMultiFacets: EventEmitter<any> = new EventEmitter();
+  @Output() goto: EventEmitter<number> = new EventEmitter();
 
   constructor() { 
     
@@ -28,5 +29,9 @@ export class SharedService {
 
   selectMultiFacetsEmitter(facets) {
     this.selectMultiFacets.emit(facets);
+  }
+
+  gotoEmitter(index) {
+    this.goto.emit(index);
   }
 }

@@ -131,27 +131,11 @@ md-input-container .md-input {
     font-family: MaisonNeue, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Lucida Grande", sans-serif!important
 }
 
+*/
+
 .global-navbar {
     position: absolute;
     bottom: 0
-}
-
-.global-navbar .md-nav-bar {
-    border-width: 0!important
-}
-
-.facet-header,
-.search-summary {
-    border-bottom: 1px solid #E9EDF2
-}
-
-md-nav-bar md-nav-ink-bar {
-    background: #3257ec
-}
-
-.global-navbar .md-nav-bar .md-nav-item .md-button.md-active {
-    color: #3257ec;
-    font-weight: 700
 }
 
 .navbar-spacer {
@@ -199,4 +183,20 @@ md-nav-bar md-nav-ink-bar {
     .saved {
         display: none
     }
-} */
+}
+
+/*
+.global-navbar .md-nav-bar {
+    border-width: 0!important
+}
+
+md-nav-bar md-nav-ink-bar {
+    background: #3257ec
+}
+
+.global-navbar .md-nav-bar .md-nav-item .md-button.md-active {
+    color: #3257ec;
+    font-weight: 700
+}
+
+ */

@@ -33,14 +33,33 @@
         <mat-form-field>
           <input matInput placeholder="Search">
         </mat-form-field>
-        <nav mat-tab-nav-bar>
+        <nav mat-tab-nav-bar class="global-navbar">
           <a mat-tab-link
-            *ngFor="let routeLink of routeLinks; let i = index;"
-            
-            [active]="activeLinkIndex === i"
-            (click)="activeLinkIndex = i"
+            [active]="activeLinkIndex === 0"
+            (click)="goto(0)"
           >
-            {{routeLink.label}}
+            Web
+          </a>
+          <a mat-tab-link
+            [active]="activeLinkIndex === 1"
+            (click)="goto(1)"
+          >
+            Images
+          </a>
+          <div class="saved navbar-spacer" *ngIf="isLogged">|</div>
+          <a mat-tab-link
+            [active]="activeLinkIndex === 2"
+            (click)="goto(2)"
+            *ngIf="isLogged"
+          >
+            Saved Searches
+          </a>
+          <a mat-tab-link
+            [active]="activeLinkIndex === 3"
+            (click)="goto(3)"
+            *ngIf="isLogged"
+          >
+            Saved Results
           </a>
           <router-outlet></router-outlet>
         </nav>
