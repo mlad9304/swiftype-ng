@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 import { SearchService } from '../../services/search.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-results',
@@ -32,9 +33,20 @@ export class ResultsComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private searchService: SearchService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
+
+    this.authService.getProfile((err, profile) => {
+      if(profile)
+        this.isLogged = true;
+    });
+
+    this.authService.logout.subscribe(data => {
+      this.isLogged = false;
+    });
+
     this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
       this.search();

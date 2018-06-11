@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
 
-  @Output() logged: EventEmitter<any> = new EventEmitter();
+  @Output() logout: EventEmitter<any> = new EventEmitter();
 
   auth0 = new auth0.WebAuth({
     clientID: environment.AUTH0_CLIENT_ID,
@@ -52,11 +52,16 @@ export class AuthService {
     localStorage.setItem('expires_at', expiresAt);
   }
 
-  logout() {
+  logoutEmitter() {
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+
+    this.logout.emit({
+      logout: true
+    });
+
     // Go back to the home route
     this.router.navigate(['/']);
   }

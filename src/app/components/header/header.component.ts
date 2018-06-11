@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
   routeLinks: any[];
   activeLinkIndex;
 
+  isLogged = false;
   nickname = "";
   email = "";
 
@@ -46,8 +47,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.authService.getProfile((err, profile) => {
-      this.nickname = profile.nickname;
-      this.email = profile.name;
+      if(profile) {
+        this.isLogged = true;
+        this.nickname = profile.nickname;
+        this.email = profile.name;
+      }
     })
   }
 
@@ -63,8 +67,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-
-    // this.authService.logout();
+    this.isLogged = false;
+    this.authService.logoutEmitter();
   }
 
 }
