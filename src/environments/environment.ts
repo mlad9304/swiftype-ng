@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   AUTH0_CLIENT_ID: 'QtJKA5Os_QRRE4OLaEJ_membY4vElfeo',
   AUTH0_DOMAIN: 'marcoauth0.auth0.com',
-  AUTH0_CALLBACK_URL: 'http://localhost/swiftype/#/callback',
+  AUTH0_CALLBACK_URL: 'http://localhost:4200/callback',
   SERVER_URL: 'https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243'
 };
 

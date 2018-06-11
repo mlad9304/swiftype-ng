@@ -7,7 +7,8 @@
     align-items: center;
     margin-bottom: 10px;
     font-size: .875em;
-    padding-bottom: 3px
+    padding-bottom: 3px;
+    border-bottom: 1px solid #E9EDF2;
 }
 
 .search-summary>* {
@@ -22,6 +23,15 @@
     float: left;
     padding-top: 2px;
     padding-bottom: 10px
+}
+
+.saved_searches {
+    position: relative;
+    top: -3px;
+    left: 20px;
+    float: left;
+    padding-right: 25px;
+    cursor: pointer
 }
 
 .filter-label-container {

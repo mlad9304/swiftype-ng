@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,8 @@ export class HeaderComponent implements OnInit {
   activeLinkIndex;
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private authService: AuthService
   ) {
 
     this.routeLinks = [

@@ -45,7 +45,8 @@
     font-weight: 600;
     color: rgba(0, 0, 0, .7);
     text-transform: uppercase;
-    letter-spacing: .08em
+    letter-spacing: .08em;
+    border-bottom: 1px solid #E9EDF2;
 }
 
 .facet-option {
