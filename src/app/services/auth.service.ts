@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
@@ -11,6 +11,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
+
+  @Output() logged: EventEmitter<any> = new EventEmitter();
 
   auth0 = new auth0.WebAuth({
     clientID: environment.AUTH0_CLIENT_ID,
@@ -64,5 +66,16 @@ export class AuthService {
     // Access Token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at') || '{}');
     return new Date().getTime() < expiresAt;
+  }
+
+  getProfile(callback) {
+    var accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      // throw new Error('Access Token must exist to fetch profile');
+      return;
+    }
+    this.auth0.client.userInfo(accessToken, function(err, profile) {
+      callback(err, profile);
+    });
   }
 }

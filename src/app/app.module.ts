@@ -4,11 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule, MatTabsModule, MatCheckboxModule, MatButtonModule } from '@angular/material';
+import { 
+  MatInputModule, 
+  MatTabsModule, 
+  MatCheckboxModule, 
+  MatButtonModule,
+  MatMenuModule,
+  MatDialogModule,
+  MatListModule
+} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { HeaderComponent } from './components/header/header.component';
+import { HeaderComponent, ProfileDialog } from './components/header/header.component';
 import { FacetsComponent } from './components/facets/facets.component';
 import { ResultsComponent } from './components/results/results.component';
 import { CallbackComponent } from './components/callback/callback.component';
@@ -28,6 +36,10 @@ const appRoutes: Routes = [
     FacetsComponent,
     ResultsComponent,
     CallbackComponent,
+    ProfileDialog
+  ],
+  entryComponents: [
+    ProfileDialog
   ],
   imports: [
     BrowserModule,
@@ -38,7 +50,10 @@ const appRoutes: Routes = [
     MatInputModule,
     MatTabsModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatListModule
   ],
   providers: [SharedService],
   bootstrap: [AppComponent]

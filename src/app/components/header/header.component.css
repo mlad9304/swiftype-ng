@@ -80,8 +80,7 @@
     right: 20px
 }
 
-.login-button i,
-.profile-menu i {
+.mat-menu-item i {
     position: relative;
     top: 7px;
     margin-left: 10px;

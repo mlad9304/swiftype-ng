@@ -10,6 +10,17 @@
           class="login-button"
           (click)="authService.login()"
         >Sign In <i class="material-icons">perm_identity</i></button>
+        <button mat-button
+          [matMenuTriggerFor]="profileMenu"
+          *ngIf="authService.isAuthenticated()"
+          class="profile-menu"
+        >
+          {{nickname}} <i class="material-icons">perm_identity</i>
+        </button>
+        <mat-menu #profileMenu="matMenu">
+          <button mat-menu-item (click)="profile()"><i class="fa fa-user"></i>Profile</button>
+          <button mat-menu-item (click)="logout()"><i class="fa fa-sign-out"></i>Log Out</button>
+        </mat-menu>
       </div>
     </div>
     <div class="logo-wrapper">

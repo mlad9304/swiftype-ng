@@ -1,6 +1,7 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 import { AuthService } from '../../services/auth.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +13,13 @@ export class HeaderComponent implements OnInit {
   routeLinks: any[];
   activeLinkIndex;
 
+  nickname = "";
+  email = "";
+
   constructor(
     private sharedService: SharedService,
-    private authService: AuthService
+    private authService: AuthService,
+    public dialog: MatDialog
   ) {
 
     this.routeLinks = [
@@ -40,6 +45,43 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.getProfile((err, profile) => {
+      this.nickname = profile.nickname;
+      this.email = profile.name;
+    })
+  }
+
+  profile() {
+    let dialogRef = this.dialog.open(ProfileDialog, {
+      width: '250px',
+      data: { nickname: this.nickname, email: this.email }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      
+    });
+  }
+
+  logout() {
+
+    // this.authService.logout();
+  }
+
+}
+
+
+@Component({
+  selector: 'profile-dialog',
+  templateUrl: 'profile-dialog.html',
+})
+export class ProfileDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<ProfileDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }
