@@ -3,6 +3,8 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +18,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post('https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243/wiki/_search', {
+    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
       "from": from,
       "size": size,
       "aggs" : {
@@ -47,7 +49,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post('https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243/wiki/_search', {
+    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
       "from": from,
       "size": size,
       "query": {
