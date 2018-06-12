@@ -324,7 +324,8 @@ pre code {
 .mat-tab-link {
     min-width: 100px !important;
 }
-/* focus style */
+
+
 .mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, 
 .mat-tab-group.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus, 
 .mat-tab-nav-bar.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, 
@@ -332,7 +333,18 @@ pre code {
     color: #3257ec;
     font-weight: 700
 }
-/* ink bar style */
 .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
-    background: #3257ec;
+    /* background: #3257ec; */
+}
+
+
+.mat-form-field-appearance-legacy.mat-focused .mat-form-field-label {
+    color: #3257ec;
+}
+/* .mat-form-field-appearance-legacy.mat-focused .mat-form-field-underline {
+    background-color: #3257ec!important;
+} */
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #3257ec;
 }
