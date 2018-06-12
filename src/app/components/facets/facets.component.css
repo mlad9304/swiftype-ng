@@ -88,17 +88,7 @@
     color: #3257ec
 }
 
-md-checkbox {
-    margin: 0;
-    margin-bottom: 5px!important;
-    cursor: pointer;
-    padding: 0 3px 0 0
-}
-
-md-checkbox .md-container {
-    top: 37%!important
-}
-
-md-checkbox.md-checked.blue .md-icon {
-    background-color: #3257ec
+.mat-checkbox {
+    position: relative;
+    top: -5px;
 }

@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private authService: AuthService,
+    public authService: AuthService,
     public dialog: MatDialog
   ) {
 
