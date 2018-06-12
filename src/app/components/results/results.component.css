@@ -63,6 +63,11 @@
     }
 }
 
+mat-card {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+}
+
 .result:hover {
     background-color: #fff;
     border-radius: 4px;

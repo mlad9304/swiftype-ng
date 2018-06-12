@@ -50,8 +50,7 @@ export class ResultsComponent implements OnInit {
   isInvalidNextPage_savedsearches: boolean = false;
 
   gridCols = 3;
-  gridRowHeight = "4:5"; 
-  gridGutterSize = 20;
+  gridRowHeight = "360px"; 
 
   constructor(
     private sharedService: SharedService,
@@ -61,7 +60,7 @@ export class ResultsComponent implements OnInit {
     private mediaService: MediaService
   ) {
     this._media$.subscribe((e: MediaChange) => {
-      this.toggle();
+      this.responsive();
     });
   }
 
@@ -145,26 +144,23 @@ export class ResultsComponent implements OnInit {
 
     });
 
-    this.toggle();
+    this.responsive();
   }
 
-  private toggle() {
+  private responsive() {
 
     const isLarge = this.mediaService.isActive('gt-md');
     if(isLarge) {
       this.gridCols = 3;
-      this.gridRowHeight = "4:5";
-      this.gridGutterSize = 20;
+      this.gridRowHeight = "360px";
     } else {
       const isSmall = this.mediaService.isActive('lt-sm');
       if(isSmall) {
         this.gridCols = 1;
-        this.gridRowHeight = "4:4.5";
-        this.gridGutterSize = 12;
+        this.gridRowHeight = "4:4.3";
       } else {
         this.gridCols = 2;
         this.gridRowHeight = "4:4.8";
-        this.gridGutterSize = 16;
       }
       
     }

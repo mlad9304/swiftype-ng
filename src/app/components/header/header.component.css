@@ -77,16 +77,25 @@
 .login-button,
 .profile-menu {
     position: relative;
-    top: 10px;
-    right: 20px
+    top: 20px;
+    right: 15px;
+    padding: 5px 10px;
+}
+
+.login-button i,
+.profile-menu i {
+    position: relative;
+    margin-left: 10px;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: rgba(220, 220, 220, .5);
+    color: rgba(0, 0, 0, .6)
 }
 
 .mat-menu-item i {
     position: relative;
-    top: 7px;
-    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 50%;
-    padding: 5px;
     background-color: rgba(220, 220, 220, .5);
     color: rgba(0, 0, 0, .6)
 }
@@ -147,7 +156,7 @@ md-input-container .md-input {
 }
 
 .saved {
-    display: block
+    display: inline-flex
 }
 
 @media (min-width:740px) {
@@ -184,6 +193,18 @@ md-input-container .md-input {
     .saved {
         display: none
     }
+}
+
+.mat-tab-nav-bar {
+    border-width: 0!important
+}
+
+.mat-tab-label.mat-tab-label-active {
+    color: #3257ec;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background: #3257ec
 }
 
 /*
