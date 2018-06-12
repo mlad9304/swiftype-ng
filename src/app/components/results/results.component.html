@@ -8,7 +8,7 @@
                 Showing results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong> for <em [innerHtml]="query"></em>
             </div>
             <span class="saved_searches" *ngIf="isLogged && !isMySaves">
-                <i class="material-icons" ng-click="onSaveSearches($event)" *ngIf="!isSavedSearches">
+                <i class="material-icons" (click)="onSaveSearches()" *ngIf="!isSavedSearches">
                     save_alt
                 </i>
                 <span *ngIf="isSavedSearches">

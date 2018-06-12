@@ -160,6 +160,19 @@ export class SearchService {
     }).map(res => res.json());
   }
 
+  saveSearches(user, date, query, categories, isMultiFacetSelect) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(`${environment.SERVER_URL}/savedsearch/_doc`, {
+      "user": user,
+      "date_created": date,
+      "query": query,
+      "categories": categories,
+      "is_multi_facet_select": isMultiFacetSelect
+    }).map(res => res.json());
+  }
+
   searchSavedSearches(user, from, size) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

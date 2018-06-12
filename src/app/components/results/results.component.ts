@@ -36,6 +36,7 @@ export class ResultsComponent implements OnInit {
 
   isFacetFilter = false;
   selectedFacets: string[] = [];
+  isMultiFacetSelect = false;
 
   from_savedsearches: number = 0;
   size_savedsearches: number = 12;
@@ -87,6 +88,8 @@ export class ResultsComponent implements OnInit {
       this.selectedFacets = [selectedFacetValue];
       this.from = 0;
 
+      this.isMultiFacetSelect = false;
+
       this.search(false);
     });
 
@@ -100,6 +103,8 @@ export class ResultsComponent implements OnInit {
         this.isFacetFilter = false;
       else
         this.isFacetFilter = true;
+
+      this.isMultiFacetSelect = true;
 
       this.search(false);
     });
@@ -228,11 +233,17 @@ export class ResultsComponent implements OnInit {
     this.searchSavedSearches();
   }
 
+  onSaveSearches() {
+    this.searchService.saveSearches(this.user, new Date().toJSON(), this.query, this.selectedFacets, this.isMultiFacetSelect).subscribe(data => {
+      this.isSavedSearches = true;
+    });
+  }
+
   viewSearches(item) {
 
     this.query = item._source.query;
     this.sharedService.setQueryEmitter(this.query);
-    let isMultiFacetSelect = item._source.is_multi_facet_select;
+    this.isMultiFacetSelect = item._source.is_multi_facet_select;
 
     this.from = 0;
     this.isFacetFilter = item._source.categories.length === 0 ? false : true;
@@ -246,7 +257,7 @@ export class ResultsComponent implements OnInit {
 
     this.searchService.searchWithAggsAndFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
       this.searchHandler(data, true, () => {
-        if(isMultiFacetSelect) {
+        if(this.isMultiFacetSelect) {
           setTimeout(() => {
             $("div.facet-container").find(".facet-option").removeClass('selected');
           }, 100);
