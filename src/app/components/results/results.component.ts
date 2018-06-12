@@ -274,33 +274,18 @@ export class ResultsComponent implements OnInit {
         }
       });
     })
+  }
 
-    // $scope.search(true, () => {
-    //   $scope.multiFacetsData = {};
+  removeSearches = (item) => {
 
-    //   if($scope.isFacetFilter) {
-    //       if($scope.isMultiFacetSelect) {
-    //           for(let val in $scope.selectedMultiFacets)
-    //               $scope.multiFacetsData[$scope.selectedMultiFacets[val]] = true;
-
-    //           $("div.facet-container").find(".facet-option").removeClass('selected');
-    //       } else {
-    //           if($scope.selectedFacetValue !== undefined && $scope.selectedFacetValue !== '') {
-                  
-    //               let i;
-    //               for(i=0; i<$scope.categories.length; i++) {
-    //                   if($scope.categories[i].key == $scope.selectedFacetValue)
-    //                       break;
-    //               }
-                  
-    //               setTimeout(() => {
-    //                   $("div.facet-container").find(".facet-option").removeClass('selected');
-    //                   $('div.facet-container:first .facet-option').eq(i+1).addClass('selected');
-    //               }, 100);
-    //           }
-    //       }
-    //   }
-    // });
+    this.searchService.removeSearches(item._id).subscribe(data => {
+      for(let i=0; i<this.hits_savedsearches.length; i++) {
+        if(data._id === this.hits_savedsearches[i]._id) {
+            this.hits_savedsearches.splice(i, 1);
+            break;
+        }
+      }
+    })
 
   }
 

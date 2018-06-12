@@ -178,4 +178,11 @@ export class SearchService {
       }
     }).map(res => res.json());
   }
+
+  removeSearches(id) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.delete(`${environment.SERVER_URL}/savedsearch/_doc/${id}`).map(res => res.json());
+  }
 }
