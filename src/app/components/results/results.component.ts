@@ -49,7 +49,9 @@ export class ResultsComponent implements OnInit {
   isInvalidPrevPage_savedsearches: boolean = false;
   isInvalidNextPage_savedsearches: boolean = false;
 
-  gridcols = 3;
+  gridCols = 3;
+  gridRowHeight = "4:5"; 
+  gridGutterSize = 20;
 
   constructor(
     private sharedService: SharedService,
@@ -148,8 +150,24 @@ export class ResultsComponent implements OnInit {
 
   private toggle() {
 
-    const isSmall = this.mediaService.isActive('lt-md');
-    this.gridcols = isSmall ? 2 : 3;
+    const isLarge = this.mediaService.isActive('gt-md');
+    if(isLarge) {
+      this.gridCols = 3;
+      this.gridRowHeight = "4:5";
+      this.gridGutterSize = 20;
+    } else {
+      const isSmall = this.mediaService.isActive('lt-sm');
+      if(isSmall) {
+        this.gridCols = 1;
+        this.gridRowHeight = "4:4.5";
+        this.gridGutterSize = 12;
+      } else {
+        this.gridCols = 2;
+        this.gridRowHeight = "4:4.8";
+        this.gridGutterSize = 16;
+      }
+      
+    }
   }
 
   search(isReplaceReturnedFacets=true, callback=null) {

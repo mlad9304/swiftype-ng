@@ -39,10 +39,10 @@
                 </div>
             </li>
         </ul> -->
-        <mat-grid-list cols="{{gridcols}}" rowHeight="1:1">
+        <mat-grid-list cols="{{gridCols}}" rowHeight="{{gridRowHeight}}" gutterSize="{{gridGutterSize}}">
             <mat-grid-tile *ngFor="let record of hits">
                 <mat-card class="result">
-                    <img src="assets/images/back.jpg" style="width: 100%" alt="Washed Out">
+                    <img src="assets/images/back.jpg" mat-card-image alt="Washed Out">
                     <mat-card-title class="result-title">
                         <span>{{record._source.title}}</span>
                     </mat-card-title>
