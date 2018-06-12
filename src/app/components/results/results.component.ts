@@ -4,6 +4,8 @@ import { SharedService } from '../../services/shared.service';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';
 
+import { environment } from '../../../environments/environment';
+
 declare var jquery: any;
 declare var $: any;
 
@@ -51,6 +53,8 @@ export class ResultsComponent implements OnInit {
 
   gridCols = 3;
   gridRowHeight = "360px"; 
+
+  layout = environment.layout;
 
   constructor(
     private sharedService: SharedService,
