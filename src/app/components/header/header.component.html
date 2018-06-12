@@ -4,6 +4,39 @@
 <div class="global-search__header" id="searchHeader">
   <div class="header-wrapper">
     <div class="header-right-tool">
+      <div class="btn-menu-header">
+        <button mat-mini-fab
+          *ngIf="authService.isAuthenticated()"
+          [matMenuTriggerFor]="navMenu"
+        ><i class="fa fa-bars"></i></button>
+        <mat-menu #navMenu="matMenu">
+          <button mat-menu-item (click)="goto(2)">
+              Saved Searches
+          </button>
+          <button mat-menu-item (click)="goto(3)">
+              Saved Results
+          </button>
+          <button mat-menu-item (click)="profile()">
+              <i class="fa fa-user"></i>
+              Profile
+          </button>
+          <button mat-menu-item (click)="logout()">
+              <i class="fa fa-sign-out"></i>
+              Log Out
+          </button>
+        </mat-menu>
+        <button mat-mini-fab
+          *ngIf="!authService.isAuthenticated()"
+          [matMenuTriggerFor]="loginMenu"
+        ><i class="material-icons">perm_identity</i></button>
+        <mat-menu #loginMenu="matMenu">
+          <button mat-menu-item (click)="authService.login()">
+              <i class="material-icons">
+                  perm_identity
+              </i> Sign In 
+          </button>
+        </mat-menu>
+      </div>
       <div class="auth">
         <button mat-button
           *ngIf="!authService.isAuthenticated()"
@@ -51,6 +84,7 @@
             [active]="activeLinkIndex === 2"
             (click)="goto(2)"
             *ngIf="isLogged"
+            class="saved"
           >
             Saved Searches
           </a>
@@ -58,6 +92,7 @@
             [active]="activeLinkIndex === 3"
             (click)="goto(3)"
             *ngIf="isLogged"
+            class="saved"
           >
             Saved Results
           </a>

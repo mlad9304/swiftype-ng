@@ -47,21 +47,22 @@
 .header-right-tool {
     position: absolute;
     height: 100%;
-    right: 0
+    right: 0;
+    z-index: 1;
 }
 
 .btn-menu-header {
     display: none
 }
 
-/* .md-button.md-fab.md-mini {
-    width: 35px;
-    height: 30px;
+.mat-mini-fab {
+    
     background-color: rgba(230, 230, 230, .6);
     color: rgba(0, 0, 0, .6);
     margin: 0;
     padding: 0
-} */
+}
+
 
 .auth,
 .global-search__form {

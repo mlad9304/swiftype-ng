@@ -160,19 +160,6 @@ export class SearchService {
     }).map(res => res.json());
   }
 
-  saveSearches(user, date, query, categories, isMultiFacetSelect) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    return this.http.post(`${environment.SERVER_URL}/savedsearch/_doc`, {
-      "user": user,
-      "date_created": date,
-      "query": query,
-      "categories": categories,
-      "is_multi_facet_select": isMultiFacetSelect
-    }).map(res => res.json());
-  }
-
   searchSavedSearches(user, from, size) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -192,10 +179,45 @@ export class SearchService {
     }).map(res => res.json());
   }
 
+  saveSearches(user, date, query, categories, isMultiFacetSelect) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(`${environment.SERVER_URL}/savedsearch/_doc`, {
+      "user": user,
+      "date_created": date,
+      "query": query,
+      "categories": categories,
+      "is_multi_facet_select": isMultiFacetSelect
+    }).map(res => res.json());
+  }
+
   removeSearches(id) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.delete(`${environment.SERVER_URL}/savedsearch/_doc/${id}`).map(res => res.json());
+    return this.http.delete(`${environment.SERVER_URL}/savedsearch/_doc/${id}`)
+      .map(res => res.json());
+  }
+
+  saveResult(user, date, categories, title, text) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(`${environment.SERVER_URL}/saveddoc/_doc`, {
+      "user": user,
+      "date_created": date,
+      "categories": categories,
+      "title": title,
+      "text": text
+    }).map(res => res.json());
+  }
+
+  removeResult(id) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.delete(`${environment.SERVER_URL}/saveddoc/_doc/${id}`)
+      .map(res => res.json());
   }
 }

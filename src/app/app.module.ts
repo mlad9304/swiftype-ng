@@ -11,8 +11,11 @@ import {
   MatButtonModule,
   MatMenuModule,
   MatDialogModule,
-  MatListModule
+  MatListModule,
+  MatGridListModule,
+  MatCardModule,
 } from '@angular/material';
+import {FlexLayoutModule, MediaService} from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -53,9 +56,12 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatMenuModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    FlexLayoutModule
   ],
-  providers: [SharedService],
+  providers: [SharedService, MediaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

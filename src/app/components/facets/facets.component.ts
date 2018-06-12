@@ -55,7 +55,37 @@ export class FacetsComponent implements OnInit {
       this.multiFacetsData = {};
       for(let val in facets)
         this.multiFacetsData[facets[val]] = true;
-    })
+    });
+
+    $('body').on('click', function(e) {
+        
+      if ($(".btn_menu_vis").is(e.target)) {
+          $(".btn_menu_vis").toggleClass('active');
+      } else {
+          $(".btn_menu_vis").removeClass('active');
+      }
+
+      if ($(".s-sidebar__trigger").is(e.target)) {
+          $(".s-sidebar__trigger").toggleClass('active');
+      } else {
+          var element = document.getElementsByClassName("facets")[0];
+          
+          if(element !== undefined) {
+              if(e.target !== element && !element.contains(e.target)){
+                  $(".s-sidebar__trigger").removeClass('active');
+              }
+          }
+
+          var element = document.getElementsByClassName("close-facets")[0];
+
+          if(element !== undefined) {
+              if(element.contains(e.target)){
+                  $(".s-sidebar__trigger").removeClass('active');
+              }
+          }
+          
+      }
+  });
   }
 
   initFacets() {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MediaChange, ObservableMedia, MediaService} from '@angular/flex-layout';
 import { SharedService } from '../../services/shared.service';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';
@@ -48,12 +49,19 @@ export class ResultsComponent implements OnInit {
   isInvalidPrevPage_savedsearches: boolean = false;
   isInvalidNextPage_savedsearches: boolean = false;
 
+  gridcols = 3;
 
   constructor(
     private sharedService: SharedService,
     private searchService: SearchService,
     private authService: AuthService,
-  ) { }
+    private _media$: ObservableMedia,
+    private mediaService: MediaService
+  ) {
+    this._media$.subscribe((e: MediaChange) => {
+      this.toggle();
+    });
+  }
 
   ngOnInit() {
 
@@ -134,6 +142,14 @@ export class ResultsComponent implements OnInit {
       this.search();
 
     });
+
+    this.toggle();
+  }
+
+  private toggle() {
+
+    const isSmall = this.mediaService.isActive('lt-md');
+    this.gridcols = isSmall ? 2 : 3;
   }
 
   search(isReplaceReturnedFacets=true, callback=null) {
@@ -233,12 +249,6 @@ export class ResultsComponent implements OnInit {
     this.searchSavedSearches();
   }
 
-  onSaveSearches() {
-    this.searchService.saveSearches(this.user, new Date().toJSON(), this.query, this.selectedFacets, this.isMultiFacetSelect).subscribe(data => {
-      this.isSavedSearches = true;
-    });
-  }
-
   viewSearches(item) {
 
     this.query = item._source.query;
@@ -287,6 +297,18 @@ export class ResultsComponent implements OnInit {
     })
   }
 
+  onSaveSearches() {
+    this.searchService.saveSearches(
+      this.user, 
+      new Date().toJSON(), 
+      this.query, 
+      this.selectedFacets, 
+      this.isMultiFacetSelect
+    ).subscribe(data => {
+      this.isSavedSearches = true;
+    });
+  }
+
   removeSearches = (item) => {
 
     this.searchService.removeSearches(item._id).subscribe(data => {
@@ -298,6 +320,29 @@ export class ResultsComponent implements OnInit {
       }
     })
 
+  }
+
+  saveResult(item) {
+    this.searchService.saveResult(
+      this.user,
+      new Date().toJSON(),
+      [...item._source.categories],
+      item._source.title,
+      item._source.text
+    ).subscribe(data => {
+      item.isSaved = true;
+    })
+  }
+
+  removeResult(item) {
+    this.searchService.removeResult(item._id).subscribe(data => {
+      for(let i=0; i<this.hits.length; i++) {
+        if(data._id === this.hits[i]._id) {
+            this.hits.splice(i, 1);
+            break;
+        }
+      }
+    })
   }
 
 }
