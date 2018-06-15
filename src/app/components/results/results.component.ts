@@ -23,6 +23,7 @@ export class ResultsComponent implements OnInit {
   isMySavedSearches: boolean = false;
   isSaved: boolean = false;
   isSavedSearches: boolean = false;
+  isGoogleMap: boolean = false;
 
   query: string = "";
 
@@ -129,9 +130,12 @@ export class ResultsComponent implements OnInit {
       this.isSavedSearches = false;
 
       this.from_savedsearches = 0;
-
-      if(index === 1)
+      if(index === 1) {
+        this.isGoogleMap = true;
         return;
+      } else {
+        this.isGoogleMap = false;
+      }
 
       if(index === 2) { // Saved Searches
         this.isMySavedSearches = true;
@@ -152,6 +156,10 @@ export class ResultsComponent implements OnInit {
     });
 
     this.responsive();
+  }
+
+  ngOnDestroy() {
+    this.sharedService = null;
   }
 
   private responsive() {
@@ -217,11 +225,10 @@ export class ResultsComponent implements OnInit {
 
     this.hits = hits;
     this.total = total;
-    this.isNotEmptyRecords = this.total > 0;
+    this.isNotEmptyRecords = this.total > 0 ? true : false;
     this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
     this.isInvalidPrevPage = this.from <= 0;
     this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
-
     if(callback)
       callback();
   }
@@ -231,7 +238,7 @@ export class ResultsComponent implements OnInit {
 
     this.hits = hits;
     this.total = total;
-    this.isNotEmptyRecords = this.total > 0;
+    this.isNotEmptyRecords = this.total > 0 ? true : false;
     this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
     this.isInvalidPrevPage = this.from <= 0;
     this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
@@ -244,7 +251,7 @@ export class ResultsComponent implements OnInit {
       this.hits_savedsearches = hits;
       this.total_savedsearches = total;
 
-      this.isNotEmptyRecords_savedsearches = this.total_savedsearches > 0;
+      this.isNotEmptyRecords_savedsearches = this.total_savedsearches > 0 ? true : false;
       this.page_row_count_summary_savedsearches = (this.from_savedsearches + 1) + '-' + (this.from_savedsearches + this.hits_savedsearches.length);
       this.isInvalidPrevPage_savedsearches = this.from_savedsearches <= 0;
       this.isInvalidNextPage_savedsearches = (this.from_savedsearches + this.hits_savedsearches.length) >= this.total_savedsearches;

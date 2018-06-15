@@ -32,9 +32,11 @@ export class HomeComponent implements OnInit {
     });
     this.sharedService.changedQuery.subscribe(query => {
       this.isMySavedSearches = false;
+      this.isGoogleMap = false;
     });
     this.sharedService.setNavIndex.subscribe(index => {
       this.isMySavedSearches = false;
+      this.isGoogleMap = false;
     })
   }
 
