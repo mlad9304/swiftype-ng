@@ -26,6 +26,7 @@ import { CallbackComponent } from './components/callback/callback.component';
 
 import { SharedService } from './services/shared.service';
 import { GooglemapComponent } from './components/googlemap/googlemap.component';
+import { GooglemapService } from './services/googlemap.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -63,7 +64,7 @@ const appRoutes: Routes = [
     MatCardModule,
     FlexLayoutModule
   ],
-  providers: [SharedService, MediaService],
+  providers: [SharedService, MediaService, GooglemapService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

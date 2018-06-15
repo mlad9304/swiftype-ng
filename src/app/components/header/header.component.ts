@@ -55,6 +55,8 @@ export class HeaderComponent implements OnInit {
     });
 
     this.sharedService.changedQuery.subscribe(query => {
+      if(this.activeLinkIndex === 1)
+        return;
       this.activeLinkIndex = 0; //Web
     });
 

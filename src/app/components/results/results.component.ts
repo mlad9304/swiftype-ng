@@ -92,6 +92,9 @@ export class ResultsComponent implements OnInit {
       this.isMySaves = false;
       this.isMySavedSearches = false;
 
+      if(this.isGoogleMap)
+        return;
+
       this.search();
     });
 

@@ -31,6 +31,8 @@ export class HomeComponent implements OnInit {
       }
     });
     this.sharedService.changedQuery.subscribe(query => {
+      if(this.isGoogleMap)
+        return;
       this.isMySavedSearches = false;
       this.isGoogleMap = false;
     });
