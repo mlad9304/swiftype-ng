@@ -42,6 +42,8 @@ export class FacetsComponent implements OnInit {
     });
 
     this.sharedService.goto.subscribe(index => {
+      if(index === 1)
+        return;
       this.initFacets();
     });
 

@@ -8,6 +8,7 @@ import { SharedService } from '../../services/shared.service';
 })
 export class HomeComponent implements OnInit {
 
+  isGoogleMap: boolean = false;
   isMySavedSearches: boolean = false;
 
   constructor(
@@ -16,6 +17,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.sharedService.goto.subscribe(index => {
+
+      if(index === 1) {
+        this.isGoogleMap = true;
+      } else {
+        this.isGoogleMap = false;
+      }
+
       if(index === 2) { // Saved Searches
         this.isMySavedSearches = true;
       } else {

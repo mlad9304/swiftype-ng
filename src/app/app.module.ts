@@ -25,6 +25,7 @@ import { ResultsComponent } from './components/results/results.component';
 import { CallbackComponent } from './components/callback/callback.component';
 
 import { SharedService } from './services/shared.service';
+import { GooglemapComponent } from './components/googlemap/googlemap.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -39,7 +40,8 @@ const appRoutes: Routes = [
     FacetsComponent,
     ResultsComponent,
     CallbackComponent,
-    ProfileDialog
+    ProfileDialog,
+    GooglemapComponent
   ],
   entryComponents: [
     ProfileDialog

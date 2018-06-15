@@ -130,6 +130,9 @@ export class ResultsComponent implements OnInit {
 
       this.from_savedsearches = 0;
 
+      if(index === 1)
+        return;
+
       if(index === 2) { // Saved Searches
         this.isMySavedSearches = true;
         this.searchSavedSearches();

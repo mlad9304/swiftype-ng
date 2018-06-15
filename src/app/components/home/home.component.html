@@ -1,8 +1,8 @@
 <div class="global-container">
   <div class="global-search">
     <app-header></app-header>
-
-    <div class="search-ui-container">
+    <app-googlemap *ngIf="isGoogleMap"></app-googlemap>
+    <div class="search-ui-container" *ngIf="!isGoogleMap">
       <i class="s-sidebar__trigger material-icons md-28" *ngIf="!isMySavedSearches">
         keyboard_arrow_right
       </i>
