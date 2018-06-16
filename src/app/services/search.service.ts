@@ -18,7 +18,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
+    return this.http.post(`${environment.SEARCH_SERVER_URL}/wiki/_search`, {
       "from": from,
       "size": size,
       "aggs" : {
@@ -49,7 +49,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
+    return this.http.post(`${environment.SEARCH_SERVER_URL}/wiki/_search`, {
       "from": from,
       "size": size,
       "aggs" : {
@@ -85,7 +85,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
+    return this.http.post(`${environment.SEARCH_SERVER_URL}/wiki/_search`, {
       "from": from,
       "size": size,
       "query": {
@@ -110,7 +110,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/saveddoc/_search`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_search`, {
       "from": from,
       "size": size,
       "aggs" : {
@@ -140,7 +140,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/saveddoc/_search`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_search`, {
       "from": from,
       "size": size,
       "query": {
@@ -164,7 +164,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/savedsearch/_search`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/savedsearch/_search`, {
       "from": from,
       "size": size,
       "query": {
@@ -183,7 +183,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/savedsearch/_doc`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/savedsearch/_doc`, {
       "user": user,
       "date_created": date,
       "query": query,
@@ -196,7 +196,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.delete(`${environment.SERVER_URL}/savedsearch/_doc/${id}`)
+    return this.http.delete(`${environment.SERVER_URL_FOR_SAVING}/savedsearch/_doc/${id}`)
       .map(res => res.json());
   }
 
@@ -204,7 +204,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/saveddoc/_doc`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_doc`, {
       "user": user,
       "date_created": date,
       "categories": categories,
@@ -217,7 +217,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.delete(`${environment.SERVER_URL}/saveddoc/_doc/${id}`)
+    return this.http.delete(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_doc/${id}`)
       .map(res => res.json());
   }
 }
