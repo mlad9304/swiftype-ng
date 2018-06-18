@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
+import { prepareProfile } from 'selenium-webdriver/firefox';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,28 @@ export class SearchService {
   constructor(
     private http: Http
   ) { }
+
+  searchSwiftype(query, page, per_page) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.get(`${environment.SEARCH_SERVER_URL}&q=${query}&page=${page}&per_page=${per_page}`).map(res => res.json());
+  }
+  searchSwiftypeWithFacets(query, page, per_page, facetField, facetValue) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    let url = `${environment.SEARCH_SERVER_URL}&q=${query}&page=${page}&per_page=${per_page}&`;
+    
+    if(facetField === 'website_section')
+      url += `filters[page][website_section]=${facetValue}`;
+    if(facetField === 'product')
+      url += `filters[page][product]=${facetValue}`;
+    if(facetField === 'documentation_type')
+      url += `filters[page][documentation_type]=${facetValue}`;
+
+    return this.http.get(url).map(res => res.json());
+  }
 
   search(query, from, size, categorySize) {
     let headers = new Headers();

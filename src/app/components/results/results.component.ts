@@ -57,6 +57,13 @@ export class ResultsComponent implements OnInit {
 
   layout = environment.layout;
 
+  page = 1;
+  per_page = 12;
+  records = [];
+  record_count = 0;
+  num_pages = 0;
+  total_result_count = 0;
+
   constructor(
     private sharedService: SharedService,
     private searchService: SearchService,
@@ -95,7 +102,7 @@ export class ResultsComponent implements OnInit {
       if(this.isGoogleMap)
         return;
 
-      this.search();
+      this.searchSwiftype();
     });
 
     this.sharedService.selectSingleFacet.subscribe(facet => {
@@ -161,10 +168,6 @@ export class ResultsComponent implements OnInit {
     this.responsive();
   }
 
-  ngOnDestroy() {
-    this.sharedService = null;
-  }
-
   private responsive() {
 
     const isLarge = this.mediaService.isActive('gt-md');
@@ -184,6 +187,27 @@ export class ResultsComponent implements OnInit {
     }
   }
 
+  searchSwiftype(isReplaceReturnedFacets=true, callback=null) {
+  
+    if(this.isMySaves) {
+
+    } else {
+      console.log(this.query);
+
+      if(this.query === '')
+        return;
+
+      if(this.isFacetFilter) {
+
+      } else {
+        this.searchService.searchSwiftype(this.query, this.page, this.per_page).subscribe(data => {
+          this.searchHandler(data, isReplaceReturnedFacets, callback);
+        });
+      }
+    }
+  
+  }
+
   search(isReplaceReturnedFacets=true, callback=null) {
 
     if(this.isMySaves) {
@@ -199,7 +223,6 @@ export class ResultsComponent implements OnInit {
       
     } else {
 
-      console.log(this.query);
       if(this.query === '')
         return;
 
@@ -218,20 +241,41 @@ export class ResultsComponent implements OnInit {
   }
 
   searchHandler(data, isReplaceReturnedFacets, callback) {
-    const { category: categoryData, index } = data.aggregations;
-    const { buckets: categories } = categoryData;
-    const { hits, total } = data.hits;
+    // const { category: categoryData, index } = data.aggregations;
+    // const { buckets: categories } = categoryData;
+    // const { hits, total } = data.hits;
 
-    if(isReplaceReturnedFacets) {
-      this.sharedService.setCategories(categories);
-    }
+    // if(isReplaceReturnedFacets) {
+    //   this.sharedService.setCategories(categories);
+    // }
 
-    this.hits = hits;
-    this.total = total;
-    this.isNotEmptyRecords = this.total > 0 ? true : false;
-    this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
-    this.isInvalidPrevPage = this.from <= 0;
-    this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+    // this.hits = hits;
+    // this.total = total;
+    // this.isNotEmptyRecords = this.total > 0 ? true : false;
+    // this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
+    // this.isInvalidPrevPage = this.from <= 0;
+    // this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+console.log(data);
+    const { info, records, record_count } = data;
+    const { current_page: page, num_pages, per_page, total_result_count, query, facets } = info.page;
+
+    this.records = records.page;
+    this.record_count = record_count;
+    this.page = page;
+    this.num_pages = num_pages;
+    this.per_page = per_page;
+    this.total_result_count = total_result_count;
+
+    // if(isReplaceReturnedFacets) {
+    //   this.sharedService.setFacets(facets);
+    // }
+
+    this.isNotEmptyRecords = this.record_count > 0 ? true : false;
+    this.page_row_count_summary = ((this.page - 1) * this.per_page + 1) + '-' + ((this.page - 1) * this.per_page + this.record_count);
+    this.isInvalidPrevPage = this.page === 1 ? true : false;
+    this.isInvalidNextPage = this.page === this.num_pages ? true : false;
+
+
     if(callback)
       callback();
   }
