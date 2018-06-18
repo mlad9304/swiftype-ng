@@ -13,7 +13,6 @@ export class GooglemapComponent implements OnInit {
 
   @ViewChild('gmap') gmapElement: any;
   map: google.maps.Map;
-  officePos: any = {lat: -33.822985, lng: 151.055164750};
 
   isGoogleMap: boolean = true;
   query: string = "";
@@ -24,13 +23,9 @@ export class GooglemapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.map = new google.maps.Map(this.gmapElement.nativeElement, {
-      zoom: 15,
-      center: this.officePos
-    });
 
     this.sharedService.changedQuery.subscribe(query => {
-      this.query = query;console.log(query);
+      this.query = query;
       if(this.isGoogleMap)
         this.searchOfficePos();
     });
@@ -58,7 +53,7 @@ export class GooglemapComponent implements OnInit {
       const { latitude, longitude } = onerecord;
 
       console.log(latitude, longitude);
-      this.drawRoute({lat: latitude, lng: longitude});
+      this.drawRoute({lat: Number(latitude), lng: Number(longitude)});
     })
   }
 
@@ -83,14 +78,21 @@ export class GooglemapComponent implements OnInit {
 }
 
   drawRoute(officePos) {
+
+    this.map = new google.maps.Map(this.gmapElement.nativeElement, {
+      zoom: 15,
+      center: officePos
+    });
+
+
     var directionsService = new google.maps.DirectionsService;
     var directionsRenderer = new google.maps.DirectionsRenderer({map: this.map});
 
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
 
-        // var currentPos = {lat: position.coords.latitude, lng: position.coords.longitude};
-        var currentPos = {lat: -33.851035, lng: 151.127381};
+        var currentPos = {lat: position.coords.latitude, lng: position.coords.longitude};
+        // var currentPos = {lat: -33.851035, lng: 151.127381};
         directionsService.route({
           origin: currentPos.lat + ', ' + currentPos.lng,
           destination: officePos.lat + ', ' + officePos.lng,
