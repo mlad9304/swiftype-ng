@@ -31,12 +31,17 @@ export class ResultsComponent implements OnInit {
   size: number = 12;
   categorySize: number = 5;
 
-  hits: any[] = [];
-  total: number = 0;
   isNotEmptyRecords: boolean = false;
   page_row_count_summary: string = "";
   isInvalidPrevPage: boolean = false;
   isInvalidNextPage: boolean = false;
+
+  page = 1;
+  per_page = 12;
+  records = [];
+  record_count = 0;
+  num_pages = 0;
+  total_result_count = 0;
 
   isFacetFilter = false;
   selectedFacets: string[] = [];
@@ -57,12 +62,7 @@ export class ResultsComponent implements OnInit {
 
   layout = environment.layout;
 
-  page = 1;
-  per_page = 12;
-  records = [];
-  record_count = 0;
-  num_pages = 0;
-  total_result_count = 0;
+  
 
   constructor(
     private sharedService: SharedService,
@@ -92,6 +92,7 @@ export class ResultsComponent implements OnInit {
     this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
 
+      this.page = 0;
       this.from = 0;
       this.isFacetFilter = false;
       this.selectedFacets = [];
@@ -110,19 +111,21 @@ export class ResultsComponent implements OnInit {
 
       this.isFacetFilter = isFacetFilter;
       this.selectedFacets = [selectedFacetValue];
+      this.page = 0;
       this.from = 0;
 
       this.isMultiFacetSelect = false;
 
-      this.search(false);
+      this.searchSwiftype(false);
     });
 
     this.sharedService.selectMultiFacets.subscribe(facets => {
       const { selectedMultiFacets } = facets;
 
       this.selectedFacets = selectedMultiFacets;
+      this.page = 0;
       this.from = 0;
-
+      
       if(selectedMultiFacets.length === 0)
         this.isFacetFilter = false;
       else
@@ -130,10 +133,11 @@ export class ResultsComponent implements OnInit {
 
       this.isMultiFacetSelect = true;
 
-      this.search(false);
+      this.searchSwiftype(false);
     });
 
     this.sharedService.goto.subscribe(index => {
+      this.page = 0;
       this.from = 0;
       this.isFacetFilter = false;
       this.selectedFacets = [];
@@ -161,7 +165,7 @@ export class ResultsComponent implements OnInit {
         this.isMySaves = false;
       }
 
-      this.search();
+      this.searchSwiftype();
 
     });
 
@@ -190,27 +194,6 @@ export class ResultsComponent implements OnInit {
   searchSwiftype(isReplaceReturnedFacets=true, callback=null) {
   
     if(this.isMySaves) {
-
-    } else {
-      console.log(this.query);
-
-      if(this.query === '')
-        return;
-
-      if(this.isFacetFilter) {
-
-      } else {
-        this.searchService.searchSwiftype(this.query, this.page, this.per_page).subscribe(data => {
-          this.searchHandler(data, isReplaceReturnedFacets, callback);
-        });
-      }
-    }
-  
-  }
-
-  search(isReplaceReturnedFacets=true, callback=null) {
-
-    if(this.isMySaves) {
       if(this.isFacetFilter) {
         this.searchService.searchMySavesWithFacets(this.user, this.from, this.size, this.selectedFacets).subscribe(data => {
           this.searchHandler2(data);
@@ -220,61 +203,92 @@ export class ResultsComponent implements OnInit {
           this.searchHandler(data, isReplaceReturnedFacets, callback);
         });
       }
-      
     } else {
+      console.log(this.query);
 
       if(this.query === '')
         return;
 
       if(this.isFacetFilter) {
-        this.searchService.searchWithFacets(this.query, this.from, this.size, this.selectedFacets).subscribe(data => {
-          this.searchHandler2(data);            
+        this.searchService.searchSwiftypeWithFacets(this.query, this.page, this.per_page, this.selectedFacets).subscribe(data => {
+          this.searchHandler(data, isReplaceReturnedFacets, callback);
         });
       } else {
-        this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
+        this.searchService.searchSwiftype(this.query, this.page, this.per_page).subscribe(data => {
           this.searchHandler(data, isReplaceReturnedFacets, callback);
         });
       }
-      
     }
-    
+  
   }
 
   searchHandler(data, isReplaceReturnedFacets, callback) {
-    // const { category: categoryData, index } = data.aggregations;
-    // const { buckets: categories } = categoryData;
-    // const { hits, total } = data.hits;
 
-    // if(isReplaceReturnedFacets) {
-    //   this.sharedService.setCategories(categories);
-    // }
+    if(this.isMySaves) {
+      const { category: categoryData, index } = data.aggregations;
+      const { buckets: facets } = categoryData;
+      const { hits, total } = data.hits;
 
-    // this.hits = hits;
-    // this.total = total;
-    // this.isNotEmptyRecords = this.total > 0 ? true : false;
-    // this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
-    // this.isInvalidPrevPage = this.from <= 0;
-    // this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
-console.log(data);
-    const { info, records, record_count } = data;
-    const { current_page: page, num_pages, per_page, total_result_count, query, facets } = info.page;
+      if(isReplaceReturnedFacets) {
+        this.sharedService.setFacets(facets);
+      }
 
-    this.records = records.page;
-    this.record_count = record_count;
-    this.page = page;
-    this.num_pages = num_pages;
-    this.per_page = per_page;
-    this.total_result_count = total_result_count;
+      this.records = hits.map(record => {
+        return {
+          title: record._source.title,
+          body: record._source.text,
+          user: record._source.user,
+          url: record._source.url,
+          _id: record._id
+        }
+      });
+      this.total_result_count = total;
+      this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
+      this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
+      this.isInvalidPrevPage = this.from <= 0;
+      this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
 
-    // if(isReplaceReturnedFacets) {
-    //   this.sharedService.setFacets(facets);
-    // }
+    } else {
+      const { info, records, record_count } = data;
+      const { current_page: page, num_pages, per_page, total_result_count, query, facets } = info.page;
+      
+      this.records = records.page.map(record => {
+        return {
+          body: record.highlight.body,
+          title: record.title,
+          url: record.url,
+          sections: record.sections,
+        }
+      });
+      this.record_count = record_count;
+      this.page = page;
+      this.num_pages = num_pages;
+      this.per_page = per_page;
+      this.total_result_count = total_result_count;
 
-    this.isNotEmptyRecords = this.record_count > 0 ? true : false;
-    this.page_row_count_summary = ((this.page - 1) * this.per_page + 1) + '-' + ((this.page - 1) * this.per_page + this.record_count);
-    this.isInvalidPrevPage = this.page === 1 ? true : false;
-    this.isInvalidNextPage = this.page === this.num_pages ? true : false;
+      if(isReplaceReturnedFacets) {
 
+        let shortedFacets = [];
+        let i=0;
+        for(let key in facets.sections) {
+          if(i > environment.FACETS_SIZE)
+            break;
+          let newObj = {};
+          newObj["key"] = key;
+          newObj["doc_count"] = facets.sections[key];
+          shortedFacets.push(newObj);
+          i++;
+        }
+
+        this.sharedService.setFacets(shortedFacets);
+      }
+
+      this.isNotEmptyRecords = this.record_count > 0 ? true : false;
+      this.page_row_count_summary = ((this.page - 1) * this.per_page + 1) + '-' + ((this.page - 1) * this.per_page + this.record_count);
+      this.isInvalidPrevPage = this.page === 1 ? true : false;
+      this.isInvalidNextPage = this.page === this.num_pages ? true : false;
+
+    }
 
     if(callback)
       callback();
@@ -283,12 +297,20 @@ console.log(data);
   searchHandler2(searchResult) {
     const { hits, total } = searchResult.hits;
 
-    this.hits = hits;
-    this.total = total;
-    this.isNotEmptyRecords = this.total > 0 ? true : false;
-    this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
+    this.records = hits.map(record => {
+      return {
+        title: record._source.title,
+        body: record._source.text,
+        user: record._source.user,
+        url: record._source.url,
+        _id: record._id
+      }
+    });;
+    this.total_result_count = total;
+    this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
+    this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
     this.isInvalidPrevPage = this.from <= 0;
-    this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+    this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
   }
 
   searchSavedSearches() {
@@ -306,13 +328,19 @@ console.log(data);
   }
 
   prevPage() {
-    this.from -= this.size;
-    this.search(false);
+    if(this.isMySaves)
+      this.from -= this.size;
+    else
+      this.page -= 1;
+    this.searchSwiftype(false);
   }
 
   nextPage() {
-    this.from += this.size;
-    this.search(false);
+    if(this.isMySaves)
+      this.from += this.size;
+    else
+      this.page += 1;
+    this.searchSwiftype(false);
   }
 
   prevPageSavedsearches() {
@@ -325,12 +353,12 @@ console.log(data);
   }
 
   viewSearches(item) {
-
     this.query = item._source.query;
     this.sharedService.setQueryEmitter(this.query);
     this.isMultiFacetSelect = item._source.is_multi_facet_select;
 
     this.from = 0;
+    this.page = 1;
     this.isFacetFilter = item._source.categories.length === 0 ? false : true;
     this.isSavedSearches = false;
     this.selectedFacets = item._source.categories;
@@ -340,7 +368,7 @@ console.log(data);
     this.isMySaves = false;
     this.isMySavedSearches = false;
 
-    this.searchService.searchWithAggsAndFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+    this.searchService.searchSwiftype(this.query, this.page, this.per_page).subscribe(data => {
       this.searchHandler(data, true, () => {
         if(this.isMultiFacetSelect) {
           setTimeout(() => {
@@ -348,28 +376,51 @@ console.log(data);
           }, 100);
           
           this.sharedService.setMultiFacetsDataEmitter(this.selectedFacets);
-        }
-        else {
+          this.searchService.searchSwiftypeWithFacets(this.query, this.page, this.per_page, this.selectedFacets).subscribe(data => {
+            this.searchHandler(data, false, null);
+          })
+        } else {
           if(this.isFacetFilter) {
-
-            const { category: categoryData } = data.aggregations;
-            const { buckets: categories } = categoryData;
+            const categories = data.info.page.facets.sections;
             let selectedFacetValue = item._source.categories[0];
 
-            let i;
-            for(i=0; i<categories.length; i++) {
-                if(categories[i].key == selectedFacetValue)
-                    break;
+            let i = 0;
+            for(let key in categories) {
+              if(key === selectedFacetValue)
+                break;
+              i++;
             }
             
             setTimeout(() => {
                 $("div.facet-container").find(".facet-option").removeClass('selected');
                 $('div.facet-container:first .facet-option').eq(i+1).addClass('selected');
             }, 100);
+
+            this.searchService.searchSwiftypeWithFacets(this.query, this.page, this.per_page, this.selectedFacets).subscribe(data => {
+              this.searchHandler(data, false, null);
+            })
           }
         }
-      });
+      })
     })
+
+    // this.searchService.searchWithAggsAndFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+    //   this.searchHandler(data, true, () => {
+        // if(this.isMultiFacetSelect) {
+        //   setTimeout(() => {
+        //     $("div.facet-container").find(".facet-option").removeClass('selected');
+        //   }, 100);
+          
+        //   this.sharedService.setMultiFacetsDataEmitter(this.selectedFacets);
+        // }
+        // else {
+        //   if(this.isFacetFilter) {
+
+            
+        //   }
+        // }
+    //   });
+    // })
   }
 
   onSaveSearches() {
@@ -384,9 +435,9 @@ console.log(data);
     });
   }
 
-  removeSearches = (item) => {
+  removeSearches = (record) => {
 
-    this.searchService.removeSearches(item._id).subscribe(data => {
+    this.searchService.removeSearches(record._id).subscribe(data => {
       for(let i=0; i<this.hits_savedsearches.length; i++) {
         if(data._id === this.hits_savedsearches[i]._id) {
             this.hits_savedsearches.splice(i, 1);
@@ -397,23 +448,24 @@ console.log(data);
 
   }
 
-  saveResult(item) {
+  saveResult(record) {
     this.searchService.saveResult(
       this.user,
       new Date().toJSON(),
-      [...item._source.categories],
-      item._source.title,
-      item._source.text
+      [...record.sections],
+      record.title,
+      record.body,
+      record.url
     ).subscribe(data => {
-      item.isSaved = true;
+      record.isSaved = true;
     })
   }
 
-  removeResult(item) {
-    this.searchService.removeResult(item._id).subscribe(data => {
-      for(let i=0; i<this.hits.length; i++) {
-        if(data._id === this.hits[i]._id) {
-            this.hits.splice(i, 1);
+  removeResult(record) {
+    this.searchService.removeResult(record._id).subscribe(data => {
+      for(let i=0; i<this.records.length; i++) {
+        if(data._id === this.records[i]._id) {
+            this.records.splice(i, 1);
             break;
         }
       }

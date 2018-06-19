@@ -11,10 +11,10 @@
       <span class="facet-label">All</span>
       <span class="facet-count"></span>
   </div>
-  <div *ngFor="let category of categories">
-      <div class="facet-option" (click)="handleClickFacet($event, category.key)">
-          <span class="facet-label">{{category.key}}</span>
-          <span class="facet-count">{{category.doc_count}}</span>
+  <div *ngFor="let facet of facets">
+      <div class="facet-option" (click)="handleClickFacet($event, facet.key)">
+          <span class="facet-label">{{facet.key}}</span>
+          <span class="facet-count">{{facet.doc_count}}</span>
       </div>
   </div>
 </div>
@@ -22,11 +22,11 @@
   <div class="facet-header">
       <span>Multi Select Categories</span>
   </div>
-  <div *ngFor="let category of categories">
+  <div *ngFor="let facet of facets">
           
       <div class="facet-option">
-          <mat-checkbox [(ngModel)]="multiFacetsData[category.key]" (ngModelChange)="handleClickMultiFacet($event)">{{category.key}}</mat-checkbox>
-          <span class="facet-count">{{category.doc_count}}</span>
+          <mat-checkbox [(ngModel)]="multiFacetsData[facet.key]" (ngModelChange)="handleClickMultiFacet($event)"><span class="facet-label">{{facet.key}}</span></mat-checkbox>
+          <span class="facet-count">{{facet.doc_count}}</span>
       </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
+import { environment } from '../../../environments/environment';
 
 declare var jquery: any;
 declare var $: any;
@@ -14,6 +15,7 @@ export class FacetsComponent implements OnInit {
   isNotEmptyFacets = false;
 
   categories: any[] = [];
+  facets: any[] = [];
   multiFacetsData: any = {};
 
   isFacetFilter: boolean = false;
@@ -36,6 +38,22 @@ export class FacetsComponent implements OnInit {
 
       for(let i=0; i<categories.length; i++) {
         this.multiFacetsData[categories[i].key] = false;
+      }
+
+      $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');
+    });
+
+    this.sharedService.changedFacets.subscribe(facets => {
+
+      this.facets = facets;
+
+      if(this.facets.length > 0)
+        this.isNotEmptyFacets = true;
+      else
+        this.isNotEmptyFacets = false;
+
+      for(let i=0; i<this.facets.length; i++) {
+        this.multiFacetsData[this.facets[i].key] = false;
       }
 
       $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');

@@ -8,6 +8,7 @@ export class SharedService {
   @Output() changedQuery: EventEmitter<string> = new EventEmitter();
   @Output() setQuery: EventEmitter<string> = new EventEmitter();
   @Output() changedCategories: EventEmitter<any[]> = new EventEmitter();
+  @Output() changedFacets: EventEmitter<any[]> = new EventEmitter();
   @Output() selectSingleFacet: EventEmitter<any> = new EventEmitter();
   @Output() selectMultiFacets: EventEmitter<any> = new EventEmitter();
   @Output() setMultiFacetsData: EventEmitter<any> = new EventEmitter();
@@ -28,6 +29,10 @@ export class SharedService {
 
   setCategories(categories) {
     this.changedCategories.emit(categories);
+  }
+
+  setFacets(facets) {
+    this.changedFacets.emit(facets);
   }
 
   selectSingleFacetsEmitter(facet) {

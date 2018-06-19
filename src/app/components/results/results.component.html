@@ -3,10 +3,10 @@
     <div>
         <div *ngIf="isNotEmptyRecords" class="search-summary">
             <div class="search-summary-label" *ngIf="isMySaves">
-                Saved results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong>
+                Saved results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total_result_count"></strong>
             </div>
             <div class="search-summary-label" *ngIf="!isMySaves">
-                Showing results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total"></strong> for <em [innerHtml]="query"></em>
+                Showing results <strong [innerHtml]="page_row_count_summary"></strong> of <strong [innerHtml]="total_result_count"></strong> for <em [innerHtml]="query"></em>
             </div>
             <span class="saved_searches" *ngIf="isLogged && !isMySaves">
                 <i class="material-icons" (click)="onSaveSearches()" *ngIf="!isSavedSearches">
@@ -24,12 +24,15 @@
             <div style="clear:both;"></div>
         </div>
         <ul style="padding-left: 0" *ngIf="layout === 'google'">
-            <li *ngFor="let record of hits" class="result" style="padding: 1rem; position: relative; list-style-type: none;">
-                <div class="result-title">
-                    {{record._source.title}}
-                </div>
+            <li *ngFor="let record of records" class="result" style="padding: 1rem; position: relative; list-style-type: none;">
+                <a href="{{record.url}}" target="_blank">
+                    <div class="result-title">
+                        {{record.title}}
+                    </div>
+                    <div class="result-url">{{record.url}}</div>
+                </a>
                 <div class="result-description mt-10 mb-0" style="border-left: 1px solid #DAE2EB; padding-left: 8px; height: 40px">
-                    <p [innerHtml]="record._source.text"></p>
+                    <p [innerHtml]="record.body"></p>
                 </div>
                 <div class="save-button-container" (click)="removeResult(record)" *ngIf="isLogged && isMySaves" style="bottom: 10px !important;">
                     <i class="save-button fa fa-trash"></i>
@@ -41,14 +44,14 @@
             </li>
         </ul>
         <mat-grid-list cols="{{gridCols}}" rowHeight="{{gridRowHeight}}" *ngIf="layout === 'card'">
-            <mat-grid-tile *ngFor="let record of hits">
+            <mat-grid-tile *ngFor="let record of records">
                 <mat-card class="result">
                     <img src="assets/images/back.jpg" mat-card-image alt="Washed Out">
                     <mat-card-title class="result-title">
-                        <span>{{record._source.title}}</span>
+                        <span>{{record.title}}</span>
                     </mat-card-title>
                     <mat-card-content class="result-description" style="height: 80px">
-                        <p [innerHtml]="record._source.text"></p>
+                        <p [innerHtml]="record.body"></p>
                     </mat-card-content>
                     <div class="save-button-container" (click)="removeResult(record)" *ngIf="isLogged && isMySaves">
                         <i class="save-button fa fa-trash"></i>
