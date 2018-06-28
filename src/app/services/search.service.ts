@@ -8,13 +8,6 @@ import { environment } from '../../environments/environment';
 declare var jquery: any;
 declare var $: any;
 
-import * as SwiftypeAppSearch from 'swiftype-app-search-javascript';
-const client = SwiftypeAppSearch.createClient({
-  accountHostKey: 'search',
-  apiKey: '9c45zAn-KM4K-WKNFzC7',
-  engineName: 'education-dot-nsw-dot-gov-dot-au'
-})
-
 @Injectable({
   providedIn: 'root'
 })

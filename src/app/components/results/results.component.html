@@ -34,6 +34,12 @@
                 <div class="result-description mt-10 mb-0" style="border-left: 1px solid #DAE2EB; padding-left: 8px; height: 40px">
                     <p [innerHtml]="record.body"></p>
                 </div>
+                <div class="result-footer">
+                    <span class="result-tag result-tag--site-search">Site Search</span>
+                    <span class="result-tag result-tag--section">
+                        Documentation
+                    </span>
+                </div>
                 <div class="save-button-container" (click)="removeResult(record)" *ngIf="isLogged && isMySaves" style="bottom: 10px !important;">
                     <i class="save-button fa fa-trash"></i>
                 </div>
