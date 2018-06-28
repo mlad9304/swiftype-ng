@@ -35,10 +35,9 @@
                     <p [innerHtml]="record.body"></p>
                 </div>
                 <div class="result-footer">
-                    <span class="result-tag result-tag--site-search">Site Search</span>
-                    <span class="result-tag result-tag--section">
-                        Documentation
-                    </span>
+                    <span class="result-tag" [ngClass]="{'result-tag--active': getResultType(record.url) === 'html'}">HTML</span>
+                    <span class="result-tag" [ngClass]="{'result-tag--active': getResultType(record.url) === 'pdf'}">PDF</span>
+                    <span class="result-tag" [ngClass]="{'result-tag--active': getResultType(record.url) === 'doc'}">DOC</span>
                 </div>
                 <div class="save-button-container" (click)="removeResult(record)" *ngIf="isLogged && isMySaves" style="bottom: 10px !important;">
                     <i class="save-button fa fa-trash"></i>

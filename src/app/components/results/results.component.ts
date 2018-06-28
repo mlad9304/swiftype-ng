@@ -472,4 +472,16 @@ export class ResultsComponent implements OnInit {
     })
   }
 
+  getResultType(url) {
+    const regexpPDF = new RegExp(/((http(s)?(\:\/\/))+(www\.)?([\w\-\.\/])*(\.[a-zA-Z]{2,3}\/?))[^\s\b\n|]*[^.,;:\?\!\@\^\$ -](\.([pP][dD][fF]))/);
+    const regexpDOC = new RegExp(/((http(s)?(\:\/\/))+(www\.)?([\w\-\.\/])*(\.[a-zA-Z]{2,3}\/?))[^\s\b\n|]*[^.,;:\?\!\@\^\$ -](\.(([dD][oO][cC][xX]?)|([xX][lL][sS][xX]?)))/);    
+
+    if(url.match(regexpPDF))
+      return 'pdf';
+    if(url.match(regexpDOC))
+      return 'doc';
+
+    return 'html';
+  }
+
 }

@@ -76,7 +76,8 @@ mat-card {
 
 .result:hover .result-description,
 .result:hover .result-title,
-.result:hover img {
+.result:hover img,
+.result:hover .result-footer {
     opacity: .6
 }
 
@@ -127,7 +128,31 @@ mat-card {
     color: #A5B4C4;
     display: block;
     width: 600px;
-    margin-top: 2px
+    margin-top: 2px;
+}
+
+@media (min-width:1400px) {
+    .result .result-url {
+        width: 1000px;
+    }
+}
+
+@media (min-width:1200px) {
+    .result .result-url {
+        width: 800px;
+    }
+}
+
+@media(max-width: 960px) {
+    .result .result-url {
+        width: 600px;
+    }
+}
+
+@media(max-width: 600px) {
+    .result .result-url {
+        width: 300px;
+    }
 }
 
 .result .result-description {
@@ -183,7 +208,8 @@ mat-card {
 
 .result .result-footer .result-tag {
     margin-right: 5px;
-    color: #fff;
+    background-color: #fff;
+    color: #536170;
     border-radius: 3px;
     padding: 0 6px;
     font-size: .9em;
@@ -197,14 +223,14 @@ mat-card {
     -webkit-box-align: center;
     -webkit-align-items: center;
     -ms-flex-align: center;
-    align-items: center
+    align-items: center;
 }
 
 .result .result-footer .result-tag:last-child {
     margin-right: 16px
 }
 
-.result .result-footer .result-tag--enterprise-search {
+/* .result .result-footer .result-tag--enterprise-search {
     background-color: #2da0f9
 }
 
@@ -219,6 +245,11 @@ mat-card {
 .result .result-footer .result-tag--section {
     background-color: #fff;
     color: #536170
+} */
+
+.result .result-footer .result-tag--active {
+    background-color: #436df0;
+    color: #fff;
 }
 
 .pagination {
