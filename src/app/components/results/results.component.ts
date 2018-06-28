@@ -62,7 +62,9 @@ export class ResultsComponent implements OnInit {
 
   layout = environment.layout;
 
-  
+  m_names = ["January", "February", "March", 
+    "April", "May", "June", "July", "August", "September", 
+    "October", "November", "December"]; 
 
   constructor(
     private sharedService: SharedService,
@@ -239,6 +241,7 @@ export class ResultsComponent implements OnInit {
           body: record._source.text,
           user: record._source.user,
           url: record._source.url,
+          published_at: record._source.published_at,
           _id: record._id
         }
       });
@@ -258,6 +261,7 @@ export class ResultsComponent implements OnInit {
           title: record.title,
           url: record.url,
           sections: record.sections,
+          published_at: record.published_at,
         }
       });
       this.record_count = record_count;
@@ -303,9 +307,10 @@ export class ResultsComponent implements OnInit {
         body: record._source.text,
         user: record._source.user,
         url: record._source.url,
+        published_at: record._source.published_at,
         _id: record._id
       }
-    });;
+    });
     this.total_result_count = total;
     this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
     this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
@@ -404,23 +409,6 @@ export class ResultsComponent implements OnInit {
       })
     })
 
-    // this.searchService.searchWithAggsAndFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
-    //   this.searchHandler(data, true, () => {
-        // if(this.isMultiFacetSelect) {
-        //   setTimeout(() => {
-        //     $("div.facet-container").find(".facet-option").removeClass('selected');
-        //   }, 100);
-          
-        //   this.sharedService.setMultiFacetsDataEmitter(this.selectedFacets);
-        // }
-        // else {
-        //   if(this.isFacetFilter) {
-
-            
-        //   }
-        // }
-    //   });
-    // })
   }
 
   onSaveSearches() {
@@ -455,7 +443,8 @@ export class ResultsComponent implements OnInit {
       [...record.sections],
       record.title,
       record.body,
-      record.url
+      record.url,
+      record.published_at
     ).subscribe(data => {
       record.isSaved = true;
     })
@@ -482,6 +471,16 @@ export class ResultsComponent implements OnInit {
       return 'doc';
 
     return 'html';
+  }
+
+  dateToString(date) {
+    const d = new Date(date);
+
+    var curr_date = d.getDate(); 
+    var curr_month = d.getMonth(); 
+    var curr_year = d.getFullYear(); 
+
+    return `${curr_date} ${this.m_names[curr_month]}, ${curr_year}`;
   }
 
 }

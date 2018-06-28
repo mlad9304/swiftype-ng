@@ -134,7 +134,7 @@ export class SearchService {
       .map(res => res.json());
   }
 
-  saveResult(user, date, categories, title, text, url) {
+  saveResult(user, date, categories, title, text, url, published_at) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -144,7 +144,8 @@ export class SearchService {
       "categories": categories,
       "title": title,
       "text": text,
-      "url": url
+      "url": url,
+      "published_at": published_at
     }).map(res => res.json());
   }
 
