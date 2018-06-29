@@ -113,6 +113,35 @@ export class SearchService {
     }).map(res => res.json());
   }
 
+  searchSecure(query, from, size, categorySize) {
+    
+    return this.http.post(`${environment.SEARCH_SECURE}`,{
+      "from": from,
+      "size": size,
+      "aggs" : {
+        "index" : {
+          "terms" : { "field" : "_index" }
+        },
+        "category" : {
+          "terms" : { 
+              "field" : "categories.keyword", 
+              "size" : categorySize
+          },            
+        },
+      },
+      "query": {
+        "bool" : {
+          "must" : {
+            "query_string" : {
+                "fields" : ["content"],
+                "query" : query
+            }
+          },
+        }
+      }
+    }).map(res => res.json());
+  }
+
   saveSearches(user, date, query, categories, isMultiFacetSelect) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

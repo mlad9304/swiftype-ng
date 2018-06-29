@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
     });
 
     this.sharedService.changedQuery.subscribe(query => {
-      if(this.activeLinkIndex === 1)
+      if(this.activeLinkIndex === 1 || this.activeLinkIndex === 4)
         return;
       this.activeLinkIndex = 0; //Web
     });

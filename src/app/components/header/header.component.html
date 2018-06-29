@@ -79,6 +79,12 @@
           >
             Map
           </a>
+          <a mat-tab-link
+            [active]="activeLinkIndex === 4"
+            (click)="goto(4)"
+          >
+            Secure
+          </a>
           <div class="saved navbar-spacer" *ngIf="isLogged">|</div>
           <a mat-tab-link
             [active]="activeLinkIndex === 2"

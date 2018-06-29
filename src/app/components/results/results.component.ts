@@ -24,6 +24,7 @@ export class ResultsComponent implements OnInit {
   isSaved: boolean = false;
   isSavedSearches: boolean = false;
   isGoogleMap: boolean = false;
+  isSecure: boolean = false;
 
   query: string = "";
 
@@ -105,8 +106,10 @@ export class ResultsComponent implements OnInit {
       if(this.isGoogleMap) {
         return;
       }        
-
-      this.searchSwiftype();
+      if(this.isSecure)
+        this.searchSecure();
+      else
+        this.searchSwiftype();
     });
 
     this.sharedService.selectSingleFacet.subscribe(facet => {
@@ -166,6 +169,14 @@ export class ResultsComponent implements OnInit {
         this.isMySaves = true;
       } else {
         this.isMySaves = false;
+      }
+
+      if(index === 4) { // Secure
+        this.isSecure = true;
+        this.searchSecure();
+        return;
+      } else {
+        this.isSecure = false;
       }
 
       this.searchSwiftype();
@@ -333,20 +344,60 @@ export class ResultsComponent implements OnInit {
     });
   }
 
+  searchSecure(isReplaceReturnedFacets = true) {
+
+    if(this.query === '') 
+      return;
+
+    this.searchService.searchSecure(this.query, this.from, this.size, this.categorySize).subscribe(data => {
+console.log(data);
+      const { hits, total } = data.hits;
+
+
+      if(isReplaceReturnedFacets) {
+        this.sharedService.setFacets({});
+      }
+
+      this.records = hits.map(record => {
+        return {
+          title: record._source.title,
+          body: record._source.content,
+          url: record._source.url,
+          _id: record._id,
+          metatages: record._source.metatages
+        }
+      });
+      this.total_result_count = total;
+      this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
+      this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
+      this.isInvalidPrevPage = this.from <= 0;
+      this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
+
+    })
+  }
+
   prevPage() {
-    if(this.isMySaves)
+    if(this.isMySaves || this.isSecure)
       this.from -= this.size;
     else
       this.page -= 1;
-    this.searchSwiftype(false);
+    
+    if(this.isSecure)
+      this.searchSecure(false);
+    else
+      this.searchSwiftype(false);
   }
 
   nextPage() {
-    if(this.isMySaves)
+    if(this.isMySaves || this.isSecure)
       this.from += this.size;
     else
       this.page += 1;
-    this.searchSwiftype(false);
+    
+    if(this.isSecure)
+      this.searchSecure(false);
+    else
+      this.searchSwiftype(false);
   }
 
   prevPageSavedsearches() {

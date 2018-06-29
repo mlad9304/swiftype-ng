@@ -29,7 +29,6 @@ export class GooglemapComponent implements OnInit {
       if(this.isGoogleMap)
         this.searchOfficePos();
 
-      console.log('google', query);
     });
 
     this.sharedService.goto.subscribe(index => {
@@ -100,8 +99,8 @@ export class GooglemapComponent implements OnInit {
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
 
-        // var currentPos = {lat: position.coords.latitude, lng: position.coords.longitude};
-        var currentPos = {lat: -30.486870, lng: 151.644620};
+        var currentPos = {lat: position.coords.latitude, lng: position.coords.longitude};
+        // var currentPos = {lat: -30.486870, lng: 151.644620};
 
         console.log("currentPos: ", currentPos, "officePos: ", officePos);
 

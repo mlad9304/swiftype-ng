@@ -9,6 +9,7 @@ export const environment = {
   AUTH0_CALLBACK_URL: 'http://localhost:4200/callback',
   SEARCH_SERVER_URL: 'https://api.swiftype.com/api/v1/public/engines/search?facets[page][]=sections&engine_key=vopzzNb3wEbGPrMNPyvQ',
   SEARCH_SERVER_URL2: 'https://api.swiftype.com/api/v1/public/engines/search.json',
+  SEARCH_SECURE: 'http://c47f31d4.ngrok.io/det/_search',
   FACETS_SIZE: 10,
   ENGINE_KEY: 'vopzzNb3wEbGPrMNPyvQ',
   SERVER_URL_FOR_SAVING: 'https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243',
