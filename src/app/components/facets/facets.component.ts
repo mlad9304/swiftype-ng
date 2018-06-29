@@ -13,8 +13,8 @@ declare var $: any;
 export class FacetsComponent implements OnInit {
 
   isNotEmptyFacets = false;
+  isGoogleMap = false;
 
-  categories: any[] = [];
   facets: any[] = [];
   multiFacetsData: any = {};
 
@@ -28,20 +28,6 @@ export class FacetsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sharedService.changedCategories.subscribe(categories => {
-      this.categories = categories;
-
-      if(this.categories.length > 0)
-        this.isNotEmptyFacets = true;
-      else
-        this.isNotEmptyFacets = false;
-
-      for(let i=0; i<categories.length; i++) {
-        this.multiFacetsData[categories[i].key] = false;
-      }
-
-      $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');
-    });
 
     this.sharedService.changedFacets.subscribe(facets => {
 
@@ -59,9 +45,18 @@ export class FacetsComponent implements OnInit {
       $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');
     });
 
+    this.sharedService.setGoogleFacets.subscribe(facets => {
+
+      this.facets = facets;
+
+    })
+
     this.sharedService.goto.subscribe(index => {
-      if(index === 1)
+      if(index === 1) {
+        this.isGoogleMap = true;
         return;
+      }
+      this.isGoogleMap = false;
       this.initFacets();
     });
 
@@ -156,6 +151,13 @@ export class FacetsComponent implements OnInit {
     this.sharedService.selectMultiFacetsEmitter({
       selectedMultiFacets: this.selectedMultiFacets
     })
+  }
+
+  handleClickGoogleFacet(e, facet) {
+    this.sharedService.selectGoogleFacetEmitter({
+      lat: Number(facet.latitude),
+      lng: Number(facet.longitude)
+    });
   }
 
 }

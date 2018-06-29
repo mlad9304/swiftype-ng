@@ -3,7 +3,7 @@
       keyboard_arrow_left
   </i>
 </div>
-<div class="facet-container" *ngIf="isNotEmptyFacets">
+<div class="facet-container" *ngIf="isNotEmptyFacets && !isGoogleMap">
   <div class="facet-header">
       <span>Categories</span>
   </div>
@@ -18,7 +18,7 @@
       </div>
   </div>
 </div>
-<div class="facet-container" *ngIf="isNotEmptyFacets">
+<div class="facet-container" *ngIf="isNotEmptyFacets && !isGoogleMap">
   <div class="facet-header">
       <span>Multi Select Categories</span>
   </div>
@@ -29,4 +29,14 @@
           <span class="facet-count">{{facet.doc_count}}</span>
       </div>
   </div>
+</div>
+<div class="facet-container" *ngIf="isGoogleMap">
+    <div class="facet-header">
+        <span>Locations</span>
+    </div>
+    <div *ngFor="let facet of facets">
+        <div class="facet-option" (click)="handleClickGoogleFacet($event, facet)">
+            <span class="facet-label">{{facet.name}}</span>
+        </div>
+    </div>
 </div>

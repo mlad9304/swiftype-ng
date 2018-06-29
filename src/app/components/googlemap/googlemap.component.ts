@@ -37,7 +37,11 @@ export class GooglemapComponent implements OnInit {
         this.isGoogleMap = false;
       }
       this.searchOfficePos();
-    })
+    });
+
+    this.sharedService.selectGoogleFacet.subscribe(pos => {
+      this.drawRoute(pos);
+    });
   }
 
   searchOfficePos() {
@@ -46,10 +50,15 @@ export class GooglemapComponent implements OnInit {
 
     this.googlemapService.searchOfficePos(this.query).subscribe(data => {
 
-      const { record_count, records } = data;
+      const { record_count, records: recordsData } = data;
       if(record_count === 0)
         return;
-      const onerecord = records.location[0];
+
+      const { location: records } = recordsData;
+console.log(records);
+      this.sharedService.setGoogleFacetsEmitter(records);
+      
+      const onerecord = records[0];
       const { latitude, longitude } = onerecord;
 
       this.drawRoute({lat: Number(latitude), lng: Number(longitude)});
@@ -90,7 +99,8 @@ export class GooglemapComponent implements OnInit {
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
 
-        var currentPos = {lat: position.coords.latitude, lng: position.coords.longitude};
+        // var currentPos = {lat: position.coords.latitude, lng: position.coords.longitude};
+        var currentPos = {lat: -30.486870, lng: 151.644620};
 
         console.log("currentPos: ", currentPos, "officePos: ", officePos);
 
