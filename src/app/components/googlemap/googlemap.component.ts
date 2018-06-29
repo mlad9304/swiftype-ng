@@ -28,15 +28,19 @@ export class GooglemapComponent implements OnInit {
       this.query = query;
       if(this.isGoogleMap)
         this.searchOfficePos();
+
+      console.log('google', query);
     });
 
     this.sharedService.goto.subscribe(index => {
       if(index === 1) {
         this.isGoogleMap = true;
+        
+        this.searchOfficePos();
       } else {
         this.isGoogleMap = false;
       }
-      this.searchOfficePos();
+      
     });
 
     this.sharedService.selectGoogleFacet.subscribe(pos => {
@@ -55,13 +59,10 @@ export class GooglemapComponent implements OnInit {
         return;
 
       const { location: records } = recordsData;
-console.log(records);
+
       this.sharedService.setGoogleFacetsEmitter(records);
       
-      const onerecord = records[0];
-      const { latitude, longitude } = onerecord;
-
-      this.drawRoute({lat: Number(latitude), lng: Number(longitude)});
+      this.drawRoute({lat: Number(records[0].latitude), lng: Number(records[0].longitude)});
     })
   }
 

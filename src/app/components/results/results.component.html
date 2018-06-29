@@ -1,4 +1,4 @@
-<app-googlemap *ngIf="isGoogleMap"></app-googlemap>
+<app-googlemap [ngClass]="{hide: !isGoogleMap}"></app-googlemap>
 <div *ngIf="!isMySavedSearches && !isGoogleMap">
     <div>
         <div *ngIf="isNotEmptyRecords" class="search-summary">

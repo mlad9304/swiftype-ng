@@ -350,3 +350,7 @@ pre code {
 }
 
 .mat-checkbox-layout { white-space: normal !important; }
+
+.hide {
+    display: none !important;
+}

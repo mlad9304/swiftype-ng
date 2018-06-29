@@ -49,14 +49,25 @@ export class FacetsComponent implements OnInit {
 
       this.facets = facets;
 
+      if(this.facets.length > 0)
+        this.isNotEmptyFacets = true;
+      else
+        this.isNotEmptyFacets = false;
+
+      setTimeout(() => {
+        $("div.facet-container").find(".facet-option").first().addClass('selected');
+      }, 100);
+      
+
     })
 
     this.sharedService.goto.subscribe(index => {
       if(index === 1) {
         this.isGoogleMap = true;
-        return;
+      } else {
+        this.isGoogleMap = false;
       }
-      this.isGoogleMap = false;
+        
       this.initFacets();
     });
 
@@ -100,7 +111,12 @@ export class FacetsComponent implements OnInit {
           }
           
       }
-  });
+    });
+  }
+
+  ngOnDestroy() {
+    console.log('Facet Destroy');
+    delete this.sharedService;
   }
 
   initFacets() {
@@ -158,6 +174,9 @@ export class FacetsComponent implements OnInit {
       lat: Number(facet.latitude),
       lng: Number(facet.longitude)
     });
+
+    $(e.target).parents(".facets").find('.facet-option').removeClass('selected');
+    $(e.target.parentElement).addClass('selected');
   }
 
 }

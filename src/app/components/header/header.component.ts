@@ -11,7 +11,6 @@ import { query } from '@angular/animations';
 })
 export class HeaderComponent implements OnInit {
 
-  headerNavs: any[];
   activeLinkIndex = 0;
 
   isLogged = false;
@@ -25,17 +24,6 @@ export class HeaderComponent implements OnInit {
     public authService: AuthService,
     public dialog: MatDialog
   ) {
-
-    this.headerNavs = [
-      {
-        label: 'Web',
-        index: 0
-      },
-      {
-        label: 'Images',
-        index: 1
-      }
-    ];
 
   }
 
