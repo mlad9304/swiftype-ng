@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
+import { environment } from '../../../environments/environment';
 
 declare var jquery: any;
 declare var $: any;
@@ -12,8 +13,9 @@ declare var $: any;
 export class FacetsComponent implements OnInit {
 
   isNotEmptyFacets = false;
+  isGoogleMap = false;
 
-  categories: any[] = [];
+  facets: any[] = [];
   multiFacetsData: any = {};
 
   isFacetFilter: boolean = false;
@@ -26,24 +28,46 @@ export class FacetsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sharedService.changedCategories.subscribe(categories => {
-      this.categories = categories;
 
-      if(this.categories.length > 0)
+    this.sharedService.changedFacets.subscribe(facets => {
+
+      this.facets = facets;
+
+      if(this.facets.length > 0)
         this.isNotEmptyFacets = true;
       else
         this.isNotEmptyFacets = false;
 
-      for(let i=0; i<categories.length; i++) {
-        this.multiFacetsData[categories[i].key] = false;
+      for(let i=0; i<this.facets.length; i++) {
+        this.multiFacetsData[this.facets[i].key] = false;
       }
 
       $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');
     });
 
+    this.sharedService.setGoogleFacets.subscribe(facets => {
+
+      this.facets = facets;
+
+      if(this.facets.length > 0)
+        this.isNotEmptyFacets = true;
+      else
+        this.isNotEmptyFacets = false;
+
+      setTimeout(() => {
+        $("div.facet-container").find(".facet-option").first().addClass('selected');
+      }, 100);
+      
+
+    })
+
     this.sharedService.goto.subscribe(index => {
-      if(index === 1)
-        return;
+      if(index === 1) {
+        this.isGoogleMap = true;
+      } else {
+        this.isGoogleMap = false;
+      }
+        
       this.initFacets();
     });
 
@@ -87,7 +111,12 @@ export class FacetsComponent implements OnInit {
           }
           
       }
-  });
+    });
+  }
+
+  ngOnDestroy() {
+    console.log('Facet Destroy');
+    delete this.sharedService;
   }
 
   initFacets() {
@@ -138,6 +167,16 @@ export class FacetsComponent implements OnInit {
     this.sharedService.selectMultiFacetsEmitter({
       selectedMultiFacets: this.selectedMultiFacets
     })
+  }
+
+  handleClickGoogleFacet(e, facet) {
+    this.sharedService.selectGoogleFacetEmitter({
+      lat: Number(facet.latitude),
+      lng: Number(facet.longitude)
+    });
+
+    $(e.target).parents(".facets").find('.facet-option').removeClass('selected');
+    $(e.target.parentElement).addClass('selected');
   }
 
 }

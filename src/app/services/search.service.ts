@@ -5,6 +5,9 @@ import 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
 
+declare var jquery: any;
+declare var $: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,103 +17,34 @@ export class SearchService {
     private http: Http
   ) { }
 
-  search(query, from, size, categorySize) {
+  searchSwiftype(query, page, per_page) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-
-    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
-      "from": from,
-      "size": size,
-      "aggs" : {
-        "index" : {
-          "terms" : { "field" : "_index" }
-        },
-        "category" : {
-          "terms" : { 
-              "field" : "categories.keyword", 
-              "size" : categorySize
-          },            
-        },
-      },
-      "query": {
-        "bool" : {
-          "must" : {
-            "query_string" : {
-                "fields" : ["text"],
-                "query" : query
-            }
-          },
-        }
-      }
-    }).map(res => res.json());
+    
+    return this.http.get(`${environment.SEARCH_SERVER_URL}&q=${query}&page=${page}&per_page=${per_page}`).map(res => res.json());
   }
-
-  searchWithAggsAndFacets(query, from, size, categorySize, facets) {
+  searchSwiftypeWithFacets(query, page, per_page, facets) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-
-    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
-      "from": from,
-      "size": size,
-      "aggs" : {
-        "index" : {
-          "terms" : { "field" : "_index" }
-        },
-        "category" : {
-          "terms" : { 
-              "field" : "categories.keyword", 
-              "size" : categorySize
-          },            
-        },
-      },
-      "query": {
-        "bool" : {
-          "must" : {
-            "query_string" : {
-                "fields" : ["text"],
-                "query" : query
-            }
-          },
-          "filter":{
-            "terms":{
-                "categories.keyword": facets
-            }
-          }
+    var params = {
+      q: query,    
+      engine_key: environment.ENGINE_KEY,
+      page: page,
+      per_page: per_page,
+      filters: {
+        page: {
+          sections: facets
         }
       }
-    }).map(res => res.json());
-  }
-
-  searchWithFacets(query, from, size, facets) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    return this.http.post(`${environment.SERVER_URL}/wiki/_search`, {
-      "from": from,
-      "size": size,
-      "query": {
-        "bool" : {
-          "must" : {
-            "query_string" : {
-                "fields" : ["text"],
-                "query" : query
-            }
-          },
-          "filter":{
-            "terms":{
-              "categories.keyword": facets
-            }
-          }
-        }
-      }
-    }).map(res => res.json());
+    };
+    return this.http.post(`${environment.SEARCH_SERVER_URL2}`, params).map(res => res.json());
   }
 
   searchMySaves(user, from, size, categorySize) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/saveddoc/_search`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_search`, {
       "from": from,
       "size": size,
       "aggs" : {
@@ -140,7 +74,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/saveddoc/_search`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_search`, {
       "from": from,
       "size": size,
       "query": {
@@ -164,7 +98,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/savedsearch/_search`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/savedsearch/_search`, {
       "from": from,
       "size": size,
       "query": {
@@ -179,11 +113,40 @@ export class SearchService {
     }).map(res => res.json());
   }
 
+  searchSecure(query, from, size, categorySize) {
+    
+    return this.http.post(`${environment.SEARCH_SECURE}`,{
+      "from": from,
+      "size": size,
+      "aggs" : {
+        "index" : {
+          "terms" : { "field" : "_index" }
+        },
+        "category" : {
+          "terms" : { 
+              "field" : "categories.keyword", 
+              "size" : categorySize
+          },            
+        },
+      },
+      "query": {
+        "bool" : {
+          "must" : {
+            "query_string" : {
+                "fields" : ["content"],
+                "query" : query
+            }
+          },
+        }
+      }
+    }).map(res => res.json());
+  }
+
   saveSearches(user, date, query, categories, isMultiFacetSelect) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/savedsearch/_doc`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/savedsearch/_doc`, {
       "user": user,
       "date_created": date,
       "query": query,
@@ -196,20 +159,22 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.delete(`${environment.SERVER_URL}/savedsearch/_doc/${id}`)
+    return this.http.delete(`${environment.SERVER_URL_FOR_SAVING}/savedsearch/_doc/${id}`)
       .map(res => res.json());
   }
 
-  saveResult(user, date, categories, title, text) {
+  saveResult(user, date, categories, title, text, url, published_at) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${environment.SERVER_URL}/saveddoc/_doc`, {
+    return this.http.post(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_doc`, {
       "user": user,
       "date_created": date,
       "categories": categories,
       "title": title,
-      "text": text
+      "text": text,
+      "url": url,
+      "published_at": published_at
     }).map(res => res.json());
   }
 
@@ -217,7 +182,7 @@ export class SearchService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.delete(`${environment.SERVER_URL}/saveddoc/_doc/${id}`)
+    return this.http.delete(`${environment.SERVER_URL_FOR_SAVING}/saveddoc/_doc/${id}`)
       .map(res => res.json());
   }
 }

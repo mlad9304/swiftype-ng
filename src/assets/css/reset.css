@@ -348,3 +348,9 @@ pre code {
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
     background-color: #3257ec;
 }
+
+.mat-checkbox-layout { white-space: normal !important; }
+
+.hide {
+    display: none !important;
+}

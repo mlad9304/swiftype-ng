@@ -24,6 +24,7 @@ export class ResultsComponent implements OnInit {
   isSaved: boolean = false;
   isSavedSearches: boolean = false;
   isGoogleMap: boolean = false;
+  isSecure: boolean = false;
 
   query: string = "";
 
@@ -31,12 +32,17 @@ export class ResultsComponent implements OnInit {
   size: number = 12;
   categorySize: number = 5;
 
-  hits: any[] = [];
-  total: number = 0;
   isNotEmptyRecords: boolean = false;
   page_row_count_summary: string = "";
   isInvalidPrevPage: boolean = false;
   isInvalidNextPage: boolean = false;
+
+  page = 1;
+  per_page = 12;
+  records = [];
+  record_count = 0;
+  num_pages = 0;
+  total_result_count = 0;
 
   isFacetFilter = false;
   selectedFacets: string[] = [];
@@ -56,6 +62,10 @@ export class ResultsComponent implements OnInit {
   gridRowHeight = "360px"; 
 
   layout = environment.layout;
+
+  m_names = ["January", "February", "March", 
+    "April", "May", "June", "July", "August", "September", 
+    "October", "November", "December"]; 
 
   constructor(
     private sharedService: SharedService,
@@ -85,6 +95,7 @@ export class ResultsComponent implements OnInit {
     this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
 
+      this.page = 0;
       this.from = 0;
       this.isFacetFilter = false;
       this.selectedFacets = [];
@@ -92,10 +103,13 @@ export class ResultsComponent implements OnInit {
       this.isMySaves = false;
       this.isMySavedSearches = false;
 
-      if(this.isGoogleMap)
+      if(this.isGoogleMap) {
         return;
-
-      this.search();
+      }        
+      if(this.isSecure)
+        this.searchSecure();
+      else
+        this.searchSwiftype();
     });
 
     this.sharedService.selectSingleFacet.subscribe(facet => {
@@ -103,19 +117,21 @@ export class ResultsComponent implements OnInit {
 
       this.isFacetFilter = isFacetFilter;
       this.selectedFacets = [selectedFacetValue];
+      this.page = 0;
       this.from = 0;
 
       this.isMultiFacetSelect = false;
 
-      this.search(false);
+      this.searchSwiftype(false);
     });
 
     this.sharedService.selectMultiFacets.subscribe(facets => {
       const { selectedMultiFacets } = facets;
 
       this.selectedFacets = selectedMultiFacets;
+      this.page = 0;
       this.from = 0;
-
+      
       if(selectedMultiFacets.length === 0)
         this.isFacetFilter = false;
       else
@@ -123,10 +139,11 @@ export class ResultsComponent implements OnInit {
 
       this.isMultiFacetSelect = true;
 
-      this.search(false);
+      this.searchSwiftype(false);
     });
 
     this.sharedService.goto.subscribe(index => {
+      this.page = 0;
       this.from = 0;
       this.isFacetFilter = false;
       this.selectedFacets = [];
@@ -154,15 +171,19 @@ export class ResultsComponent implements OnInit {
         this.isMySaves = false;
       }
 
-      this.search();
+      if(index === 4) { // Secure
+        this.isSecure = true;
+        this.searchSecure();
+        return;
+      } else {
+        this.isSecure = false;
+      }
+
+      this.searchSwiftype();
 
     });
 
     this.responsive();
-  }
-
-  ngOnDestroy() {
-    this.sharedService = null;
   }
 
   private responsive() {
@@ -184,8 +205,8 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  search(isReplaceReturnedFacets=true, callback=null) {
-
+  searchSwiftype(isReplaceReturnedFacets=true, callback=null) {
+  
     if(this.isMySaves) {
       if(this.isFacetFilter) {
         this.searchService.searchMySavesWithFacets(this.user, this.from, this.size, this.selectedFacets).subscribe(data => {
@@ -196,42 +217,95 @@ export class ResultsComponent implements OnInit {
           this.searchHandler(data, isReplaceReturnedFacets, callback);
         });
       }
-      
     } else {
-
       console.log(this.query);
+
       if(this.query === '')
         return;
 
       if(this.isFacetFilter) {
-        this.searchService.searchWithFacets(this.query, this.from, this.size, this.selectedFacets).subscribe(data => {
-          this.searchHandler2(data);            
+        this.searchService.searchSwiftypeWithFacets(this.query, this.page, this.per_page, this.selectedFacets).subscribe(data => {
+          this.searchHandler(data, isReplaceReturnedFacets, callback);
         });
       } else {
-        this.searchService.search(this.query, this.from, this.size, this.categorySize).subscribe(data => {
+        this.searchService.searchSwiftype(this.query, this.page, this.per_page).subscribe(data => {
           this.searchHandler(data, isReplaceReturnedFacets, callback);
         });
       }
-      
     }
-    
+  
   }
 
   searchHandler(data, isReplaceReturnedFacets, callback) {
-    const { category: categoryData, index } = data.aggregations;
-    const { buckets: categories } = categoryData;
-    const { hits, total } = data.hits;
 
-    if(isReplaceReturnedFacets) {
-      this.sharedService.setCategories(categories);
+    if(this.isMySaves) {
+      const { category: categoryData, index } = data.aggregations;
+      const { buckets: facets } = categoryData;
+      const { hits, total } = data.hits;
+
+      if(isReplaceReturnedFacets) {
+        this.sharedService.setFacets(facets);
+      }
+
+      this.records = hits.map(record => {
+        return {
+          title: record._source.title,
+          body: record._source.text,
+          user: record._source.user,
+          url: record._source.url,
+          published_at: record._source.published_at,
+          _id: record._id
+        }
+      });
+      this.total_result_count = total;
+      this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
+      this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
+      this.isInvalidPrevPage = this.from <= 0;
+      this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
+
+    } else {
+      const { info, records, record_count } = data;
+      const { current_page: page, num_pages, per_page, total_result_count, query, facets } = info.page;
+      
+      this.records = records.page.map(record => {
+        return {
+          body: record.highlight.body,
+          title: record.title,
+          url: record.url,
+          sections: record.sections,
+          published_at: record.published_at,
+        }
+      });
+      this.record_count = record_count;
+      this.page = page;
+      this.num_pages = num_pages;
+      this.per_page = per_page;
+      this.total_result_count = total_result_count;
+
+      if(isReplaceReturnedFacets) {
+
+        let shortedFacets = [];
+        let i=0;
+        for(let key in facets.sections) {
+          if(i > environment.FACETS_SIZE)
+            break;
+          let newObj = {};
+          newObj["key"] = key;
+          newObj["doc_count"] = facets.sections[key];
+          shortedFacets.push(newObj);
+          i++;
+        }
+
+        this.sharedService.setFacets(shortedFacets);
+      }
+
+      this.isNotEmptyRecords = this.record_count > 0 ? true : false;
+      this.page_row_count_summary = ((this.page - 1) * this.per_page + 1) + '-' + ((this.page - 1) * this.per_page + this.record_count);
+      this.isInvalidPrevPage = this.page === 1 ? true : false;
+      this.isInvalidNextPage = this.page === this.num_pages ? true : false;
+
     }
 
-    this.hits = hits;
-    this.total = total;
-    this.isNotEmptyRecords = this.total > 0 ? true : false;
-    this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
-    this.isInvalidPrevPage = this.from <= 0;
-    this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
     if(callback)
       callback();
   }
@@ -239,12 +313,21 @@ export class ResultsComponent implements OnInit {
   searchHandler2(searchResult) {
     const { hits, total } = searchResult.hits;
 
-    this.hits = hits;
-    this.total = total;
-    this.isNotEmptyRecords = this.total > 0 ? true : false;
-    this.page_row_count_summary = `${this.from + 1}-${this.from + this.hits.length}`;
+    this.records = hits.map(record => {
+      return {
+        title: record._source.title,
+        body: record._source.text,
+        user: record._source.user,
+        url: record._source.url,
+        published_at: record._source.published_at,
+        _id: record._id
+      }
+    });
+    this.total_result_count = total;
+    this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
+    this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
     this.isInvalidPrevPage = this.from <= 0;
-    this.isInvalidNextPage = (this.from + this.hits.length) >= this.total;
+    this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
   }
 
   searchSavedSearches() {
@@ -261,14 +344,60 @@ export class ResultsComponent implements OnInit {
     });
   }
 
+  searchSecure(isReplaceReturnedFacets = true) {
+
+    if(this.query === '') 
+      return;
+
+    this.searchService.searchSecure(this.query, this.from, this.size, this.categorySize).subscribe(data => {
+console.log(data);
+      const { hits, total } = data.hits;
+
+
+      if(isReplaceReturnedFacets) {
+        this.sharedService.setFacets({});
+      }
+
+      this.records = hits.map(record => {
+        return {
+          title: record._source.title,
+          body: record._source.content,
+          url: record._source.url,
+          _id: record._id,
+          metatages: record._source.metatages
+        }
+      });
+      this.total_result_count = total;
+      this.isNotEmptyRecords = this.total_result_count > 0 ? true : false;
+      this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
+      this.isInvalidPrevPage = this.from <= 0;
+      this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
+
+    })
+  }
+
   prevPage() {
-    this.from -= this.size;
-    this.search(false);
+    if(this.isMySaves || this.isSecure)
+      this.from -= this.size;
+    else
+      this.page -= 1;
+    
+    if(this.isSecure)
+      this.searchSecure(false);
+    else
+      this.searchSwiftype(false);
   }
 
   nextPage() {
-    this.from += this.size;
-    this.search(false);
+    if(this.isMySaves || this.isSecure)
+      this.from += this.size;
+    else
+      this.page += 1;
+    
+    if(this.isSecure)
+      this.searchSecure(false);
+    else
+      this.searchSwiftype(false);
   }
 
   prevPageSavedsearches() {
@@ -281,12 +410,12 @@ export class ResultsComponent implements OnInit {
   }
 
   viewSearches(item) {
-
     this.query = item._source.query;
     this.sharedService.setQueryEmitter(this.query);
     this.isMultiFacetSelect = item._source.is_multi_facet_select;
 
     this.from = 0;
+    this.page = 1;
     this.isFacetFilter = item._source.categories.length === 0 ? false : true;
     this.isSavedSearches = false;
     this.selectedFacets = item._source.categories;
@@ -296,7 +425,7 @@ export class ResultsComponent implements OnInit {
     this.isMySaves = false;
     this.isMySavedSearches = false;
 
-    this.searchService.searchWithAggsAndFacets(this.query, this.from, this.size, this.categorySize, this.selectedFacets).subscribe(data => {
+    this.searchService.searchSwiftype(this.query, this.page, this.per_page).subscribe(data => {
       this.searchHandler(data, true, () => {
         if(this.isMultiFacetSelect) {
           setTimeout(() => {
@@ -304,28 +433,34 @@ export class ResultsComponent implements OnInit {
           }, 100);
           
           this.sharedService.setMultiFacetsDataEmitter(this.selectedFacets);
-        }
-        else {
+          this.searchService.searchSwiftypeWithFacets(this.query, this.page, this.per_page, this.selectedFacets).subscribe(data => {
+            this.searchHandler(data, false, null);
+          })
+        } else {
           if(this.isFacetFilter) {
-
-            const { category: categoryData } = data.aggregations;
-            const { buckets: categories } = categoryData;
+            const categories = data.info.page.facets.sections;
             let selectedFacetValue = item._source.categories[0];
 
-            let i;
-            for(i=0; i<categories.length; i++) {
-                if(categories[i].key == selectedFacetValue)
-                    break;
+            let i = 0;
+            for(let key in categories) {
+              if(key === selectedFacetValue)
+                break;
+              i++;
             }
             
             setTimeout(() => {
                 $("div.facet-container").find(".facet-option").removeClass('selected');
                 $('div.facet-container:first .facet-option').eq(i+1).addClass('selected');
             }, 100);
+
+            this.searchService.searchSwiftypeWithFacets(this.query, this.page, this.per_page, this.selectedFacets).subscribe(data => {
+              this.searchHandler(data, false, null);
+            })
           }
         }
-      });
+      })
     })
+
   }
 
   onSaveSearches() {
@@ -340,9 +475,9 @@ export class ResultsComponent implements OnInit {
     });
   }
 
-  removeSearches = (item) => {
+  removeSearches = (record) => {
 
-    this.searchService.removeSearches(item._id).subscribe(data => {
+    this.searchService.removeSearches(record._id).subscribe(data => {
       for(let i=0; i<this.hits_savedsearches.length; i++) {
         if(data._id === this.hits_savedsearches[i]._id) {
             this.hits_savedsearches.splice(i, 1);
@@ -353,27 +488,51 @@ export class ResultsComponent implements OnInit {
 
   }
 
-  saveResult(item) {
+  saveResult(record) {
     this.searchService.saveResult(
       this.user,
       new Date().toJSON(),
-      [...item._source.categories],
-      item._source.title,
-      item._source.text
+      [...record.sections],
+      record.title,
+      record.body,
+      record.url,
+      record.published_at
     ).subscribe(data => {
-      item.isSaved = true;
+      record.isSaved = true;
     })
   }
 
-  removeResult(item) {
-    this.searchService.removeResult(item._id).subscribe(data => {
-      for(let i=0; i<this.hits.length; i++) {
-        if(data._id === this.hits[i]._id) {
-            this.hits.splice(i, 1);
+  removeResult(record) {
+    this.searchService.removeResult(record._id).subscribe(data => {
+      for(let i=0; i<this.records.length; i++) {
+        if(data._id === this.records[i]._id) {
+            this.records.splice(i, 1);
             break;
         }
       }
     })
+  }
+
+  getResultType(url) {
+    const regexpPDF = new RegExp(/((http(s)?(\:\/\/))+(www\.)?([\w\-\.\/])*(\.[a-zA-Z]{2,3}\/?))[^\s\b\n|]*[^.,;:\?\!\@\^\$ -](\.([pP][dD][fF]))/);
+    const regexpDOC = new RegExp(/((http(s)?(\:\/\/))+(www\.)?([\w\-\.\/])*(\.[a-zA-Z]{2,3}\/?))[^\s\b\n|]*[^.,;:\?\!\@\^\$ -](\.(([dD][oO][cC][xX]?)|([xX][lL][sS][xX]?)))/);    
+
+    if(url.match(regexpPDF))
+      return 'pdf';
+    if(url.match(regexpDOC))
+      return 'doc';
+
+    return 'html';
+  }
+
+  dateToString(date) {
+    const d = new Date(date);
+
+    var curr_date = d.getDate(); 
+    var curr_month = d.getMonth(); 
+    var curr_year = d.getFullYear(); 
+
+    return `${curr_date} ${this.m_names[curr_month]}, ${curr_year}`;
   }
 
 }

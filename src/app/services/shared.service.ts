@@ -7,9 +7,11 @@ export class SharedService {
 
   @Output() changedQuery: EventEmitter<string> = new EventEmitter();
   @Output() setQuery: EventEmitter<string> = new EventEmitter();
-  @Output() changedCategories: EventEmitter<any[]> = new EventEmitter();
+  @Output() changedFacets: EventEmitter<any[]> = new EventEmitter();
+  @Output() setGoogleFacets: EventEmitter<any[]> = new EventEmitter();
   @Output() selectSingleFacet: EventEmitter<any> = new EventEmitter();
   @Output() selectMultiFacets: EventEmitter<any> = new EventEmitter();
+  @Output() selectGoogleFacet: EventEmitter<any> = new EventEmitter();
   @Output() setMultiFacetsData: EventEmitter<any> = new EventEmitter();
   @Output() goto: EventEmitter<number> = new EventEmitter();
   @Output() setNavIndex: EventEmitter<number> = new EventEmitter();
@@ -26,8 +28,12 @@ export class SharedService {
     this.setQuery.emit(query);
   }
 
-  setCategories(categories) {
-    this.changedCategories.emit(categories);
+  setFacets(facets) {
+    this.changedFacets.emit(facets);
+  }
+  
+  setGoogleFacetsEmitter(facets) {
+    this.setGoogleFacets.emit(facets);
   }
 
   selectSingleFacetsEmitter(facet) {
@@ -36,6 +42,10 @@ export class SharedService {
 
   selectMultiFacetsEmitter(facets) {
     this.selectMultiFacets.emit(facets);
+  }
+
+  selectGoogleFacetEmitter(facet) {
+    this.selectGoogleFacet.emit(facet);
   }
 
   setMultiFacetsDataEmitter(facets) {

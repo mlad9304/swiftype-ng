@@ -129,20 +129,6 @@
     }
 }
 
-/* md-input-container:not(.md-input-invalid).md-input-focused .md-input {
-    border-color: #3257ec
-}
-
-md-input-container:not(.md-input-invalid).md-input-focused label {
-    color: #3257ec
-}
-
-md-input-container .md-input {
-    font-family: MaisonNeue, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Lucida Grande", sans-serif!important
-}
-
-*/
-
 .global-navbar {
     position: absolute;
     bottom: 0
