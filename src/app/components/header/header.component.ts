@@ -27,12 +27,6 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  @HostListener('input', ['$event'])
-  input(e) {
-    this.query = e.target.value;
-    this.sharedService.changedQueryEmitter(this.query);
-  }
-
   ngOnInit() {
     this.authService.getProfile((err, profile) => {
       if(profile) {
@@ -46,10 +40,6 @@ export class HeaderComponent implements OnInit {
       if(this.activeLinkIndex === 1 || this.activeLinkIndex === 4)
         return;
       this.activeLinkIndex = 0; //Web
-    });
-
-    this.sharedService.setQuery.subscribe(query => {
-      this.query = query;
     });
 
     this.sharedService.setNavIndex.subscribe(index => {

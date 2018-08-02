@@ -105,11 +105,6 @@
     height: 100%
 }
 
-.global-search__form .mat-form-field {
-    width: 100% !important;
-    margin-top: 18px;
-}
-
 @media (max-width:600px) {
     .logo-wrapper {
         display: none
