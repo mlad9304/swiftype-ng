@@ -1,3 +1,10 @@
 <mat-form-field>
     <input matInput matPrimary placeholder="Search" [(ngModel)]="query" name="query">
 </mat-form-field>
+<div class="dropdown-box">
+    <ul>
+        <li *ngFor="let item of items" class="dropdown-item">
+            <div [innerHTML]="render(item)"></div>
+        </li>
+    </ul>
+</div>
