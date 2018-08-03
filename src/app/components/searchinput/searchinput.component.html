@@ -1,10 +1,13 @@
 <mat-form-field>
-    <input matInput matPrimary placeholder="Search" [(ngModel)]="query" name="query" (click)="inputClick()">
+    <input matInput matPrimary placeholder="Search" [(ngModel)]="query" name="query" (click)="inputClick()" autocomplete="off">
 </mat-form-field>
-<div class="dropdown-box" *ngIf="showDropDown">
+<div class="dropdown-box" [ngClass]="{hide: !showDropDown}">
     <ul *ngIf="query != ''">
-        <li *ngFor="let item of items" class="dropdown-item" (click)="itemClick($event)">
-            <div [innerHTML]="render(item)"></div>
+        <li *ngFor="let item of items; let i = index" class="dropdown-item" (click)="itemClick($event)">
+            <div>
+                <span [innerHTML]="renderItem(item)"></span>
+                <span *ngIf="isIncludeInCookie(item)" class="remove" (click)="removeQueryInCookie(item, i)">remove</span>
+            </div>
         </li>
     </ul>
 </div>

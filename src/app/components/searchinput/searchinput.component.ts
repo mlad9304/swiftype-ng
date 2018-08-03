@@ -35,6 +35,19 @@ export class SearchinputComponent implements OnInit {
     this.sharedService.setQuery.subscribe(query => {
       this.query = query;
     });
+
+    let mythis = this;
+
+    $('body').on('click', function(e) {
+      let container = $('.dropdown-box')[0];
+
+      if($.contains(container, e.target) === false 
+        && $(e.target).is('.mat-input-element') === false 
+        && $(e.target).is('.remove') === false) {
+        mythis.showDropDown = false;
+      }
+        
+    });
     
   }
 
@@ -103,7 +116,7 @@ export class SearchinputComponent implements OnInit {
     
   }
 
-  render(text) {
+  renderItem(text) {
     let element = document.createElement("span");
     if(this.query == '' || text.indexOf(this.query) == -1) {
       element.innerHTML = text;
@@ -115,18 +128,11 @@ export class SearchinputComponent implements OnInit {
     boldElement.innerHTML = text.substring(text.indexOf(this.query) + this.query.length);
     element.appendChild(boldElement);
 
-    if(this.queries.indexOf(text) > -1) {
-      let element2 = document.createElement('span');
-      element2.className = "remove";
-      element2.innerHTML = "remove";
-      element2.addEventListener('click', function() {
-        console.log('aaaaaaa');
-      })
-      element.appendChild(element2);
-    }
-
     return element.outerHTML;
-      
+  }
+
+  isIncludeInCookie(item) {
+    return this.queries.indexOf(item) > -1;
   }
 
   inputClick() {
@@ -154,5 +160,18 @@ export class SearchinputComponent implements OnInit {
     }
       
   }
+
+  removeQueryInCookie(item, index) {
+    console.log(item, index);
+
+    this.queries.splice(this.queries.indexOf(item), 1);
+    this.setQueries();
+
+    this.items.splice(this.items.indexOf(item), 1);
+    
+  }
+
+  
+
 
 }
