@@ -28,6 +28,7 @@ import { SharedService } from './services/shared.service';
 import { GooglemapComponent } from './components/googlemap/googlemap.component';
 import { GooglemapService } from './services/googlemap.service';
 import { SearchinputComponent } from './components/searchinput/searchinput.component';
+import { AutosuggestService } from './services/autosuggest.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -66,7 +67,7 @@ const appRoutes: Routes = [
     MatCardModule,
     FlexLayoutModule
   ],
-  providers: [SharedService, MediaService, GooglemapService],
+  providers: [SharedService, MediaService, GooglemapService, AutosuggestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -13,7 +13,9 @@ export const environment = {
   FACETS_SIZE: 10,
   ENGINE_KEY: 'vopzzNb3wEbGPrMNPyvQ',
   SERVER_URL_FOR_SAVING: 'https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243',
-  layout: 'google' // google or card
+  layout: 'google', // google or card
+  BING_AUTOSUGGEST_API_URL: 'https://api.cognitive.microsoft.com/bing/v7.0/suggestions',
+  BING_AUTOSUGGEST_API_KEY: 'c4bad504fe504930a095097d23a34502'
 };
 
 /*
