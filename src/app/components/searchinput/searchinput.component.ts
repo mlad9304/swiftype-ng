@@ -21,6 +21,8 @@ export class SearchinputComponent implements OnInit {
     'ebates',
     'enterprise'
   ];
+  showDropDown: boolean = false;
+  queries: string[] = [];
 
   constructor(
     private sharedService: SharedService
@@ -28,16 +30,31 @@ export class SearchinputComponent implements OnInit {
 
   ngOnInit() {
 
+    this.readQueries();
+
     this.sharedService.setQuery.subscribe(query => {
       this.query = query;
     });
     
   }
 
+  readQueries() {
+    let queriesStr = localStorage.getItem('queries');
+    if(!queriesStr)
+      this.queries = [];
+    else {
+      this.queries = JSON.parse(queriesStr);
+    }
+  }
+
+  setQueries() {
+    localStorage.setItem('queries', JSON.stringify(this.queries));
+  }
+
   @HostListener('input', ['$event'])
   input(e) {
     this.query = e.target.value;
-    this.sharedService.changedQueryEmitter(this.query);
+    this.showDropDown = true;
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -50,7 +67,8 @@ export class SearchinputComponent implements OnInit {
         this.selectNextItem();
         break;
       case 'Enter':
-
+        this.showDropDown = false;
+        this.startSearch();
         break;
     }
   }
@@ -96,7 +114,44 @@ export class SearchinputComponent implements OnInit {
     let boldElement = document.createElement('b');
     boldElement.innerHTML = text.substring(text.indexOf(this.query) + this.query.length);
     element.appendChild(boldElement);
+
+    if(this.queries.indexOf(text) > -1) {
+      let element2 = document.createElement('span');
+      element2.className = "remove";
+      element2.innerHTML = "remove";
+      element2.addEventListener('click', function() {
+        console.log('aaaaaaa');
+      })
+      element.appendChild(element2);
+    }
+
     return element.outerHTML;
+      
+  }
+
+  inputClick() {
+    if(this.query == '')
+      return;
+
+    this.showDropDown = true;
+  }
+
+  itemClick(e) {
+    let index = $('.dropdown-box li').index($(e.target).parent());
+    if(index > -1 && index < this.items.length) {
+      this.setActive(index);
+      this.showDropDown = false;
+      this.startSearch();
+    }
+  }
+
+  startSearch() {
+    this.sharedService.changedQueryEmitter(this.query);
+
+    if(this.queries.indexOf(this.query) == -1) {
+      this.queries.push(this.query);
+      this.setQueries();
+    }
       
   }
 

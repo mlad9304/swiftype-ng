@@ -1,9 +1,9 @@
 <mat-form-field>
-    <input matInput matPrimary placeholder="Search" [(ngModel)]="query" name="query">
+    <input matInput matPrimary placeholder="Search" [(ngModel)]="query" name="query" (click)="inputClick()">
 </mat-form-field>
-<div class="dropdown-box">
-    <ul>
-        <li *ngFor="let item of items" class="dropdown-item">
+<div class="dropdown-box" *ngIf="showDropDown">
+    <ul *ngIf="query != ''">
+        <li *ngFor="let item of items" class="dropdown-item" (click)="itemClick($event)">
             <div [innerHTML]="render(item)"></div>
         </li>
     </ul>

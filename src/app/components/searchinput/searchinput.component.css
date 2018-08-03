@@ -30,3 +30,12 @@
 .dropdown-box ul li.active {
     background: #f5f5f5 !important;
 }
+
+.dropdown-item ::ng-deep span.remove {
+    color: #36c;
+    float: right;
+}
+
+.dropdown-item ::ng-deep span.remove:hover {
+    text-decoration: underline;
+}
