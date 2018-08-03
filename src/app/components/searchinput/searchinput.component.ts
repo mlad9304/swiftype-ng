@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
+import { AutosuggestService } from '../../services/autosuggest.service';
 
 declare var jquery: any;
 declare var $: any;
@@ -12,20 +13,15 @@ declare var $: any;
 export class SearchinputComponent implements OnInit {
 
   query: string = "";
+  inputedQuery: string = "";
   activeItemIndex: number = -1;
-  items: string[] = [
-    'ebay',
-    'espn',
-    'expedia',
-    'etsy',
-    'ebates',
-    'enterprise'
-  ];
+  items: string[] = [];
   showDropDown: boolean = false;
   queries: string[] = [];
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private autoSuggestService: AutosuggestService
   ) { }
 
   ngOnInit() {
@@ -67,7 +63,9 @@ export class SearchinputComponent implements OnInit {
   @HostListener('input', ['$event'])
   input(e) {
     this.query = e.target.value;
+    this.inputedQuery = this.query;
     this.showDropDown = true;
+    this.getAutoSuggestData();
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -81,7 +79,9 @@ export class SearchinputComponent implements OnInit {
         break;
       case 'Enter':
         this.showDropDown = false;
+        this.inputedQuery = this.query;
         this.startSearch();
+        this.getAutoSuggestData();
         break;
     }
   }
@@ -118,14 +118,14 @@ export class SearchinputComponent implements OnInit {
 
   renderItem(text) {
     let element = document.createElement("span");
-    if(this.query == '' || text.indexOf(this.query) == -1) {
+    if(this.inputedQuery == '' || text.indexOf(this.inputedQuery) == -1) {
       element.innerHTML = text;
       return element.outerHTML;
     }
 
-    element.innerHTML = this.query;
+    element.innerHTML = this.inputedQuery;
     let boldElement = document.createElement('b');
-    boldElement.innerHTML = text.substring(text.indexOf(this.query) + this.query.length);
+    boldElement.innerHTML = text.substring(text.indexOf(this.inputedQuery) + this.inputedQuery.length);
     element.appendChild(boldElement);
 
     return element.outerHTML;
@@ -140,6 +140,8 @@ export class SearchinputComponent implements OnInit {
       return;
 
     this.showDropDown = true;
+    this.inputedQuery = this.query;
+    
   }
 
   itemClick(e) {
@@ -147,7 +149,9 @@ export class SearchinputComponent implements OnInit {
     if(index > -1 && index < this.items.length) {
       this.setActive(index);
       this.showDropDown = false;
+      this.inputedQuery = this.query;
       this.startSearch();
+      this.getAutoSuggestData();
     }
   }
 
@@ -169,6 +173,22 @@ export class SearchinputComponent implements OnInit {
 
     this.items.splice(this.items.indexOf(item), 1);
     
+  }
+
+  getAutoSuggestData() {
+    this.autoSuggestService.getData(this.query).subscribe(data => {
+      const { suggestionGroups } = data;
+      if(suggestionGroups.length > 0) {
+        const { searchSuggestions } = suggestionGroups[0];
+        this.items = [];
+        this.activeItemIndex = -1;
+        for(let i=0; i<searchSuggestions.length; i++) {
+          let q = searchSuggestions[i].query;
+          this.items.push(q);
+        }
+      }
+
+    })
   }
 
   
