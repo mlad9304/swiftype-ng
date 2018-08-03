@@ -1,9 +1,23 @@
 .mat-form-field {
     width: 100% !important;
     margin-top: 18px;
+    display: block;
 }
+
+/* .b_searchboxSubmit {
+    height: 45px;
+    width: 45px;
+    border: 8px solid #fff;
+    background: #fff url(../../../assets/images/hpc25.png) no-repeat;
+    background-position: -169px -63px;
+    overflow: hidden;
+    vertical-align: top;
+    right: 0;
+    position: absolute;
+} */
+
 .dropdown-box {
-    margin-top: -30px;
+    margin-top: -35px;
     width: 100%;
     position: relative;
     z-index: 100;
@@ -19,7 +33,7 @@
 .dropdown-box ul li {
     line-height: 30px;
     background: white;
-    padding: 5px;
+    padding: 3px;
     cursor: pointer;
 }
 

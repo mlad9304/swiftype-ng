@@ -1,6 +1,7 @@
 <mat-form-field>
     <input matInput matPrimary placeholder="Search" [(ngModel)]="query" name="query" (click)="inputClick()" autocomplete="off">
 </mat-form-field>
+<!-- <input type="submit" class="b_searchboxSubmit"> -->
 <div class="dropdown-box" [ngClass]="{hide: !showDropDown}">
     <ul *ngIf="query != ''">
         <li *ngFor="let item of items; let i = index" class="dropdown-item" (click)="itemClick($event)">
