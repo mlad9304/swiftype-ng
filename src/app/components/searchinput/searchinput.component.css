@@ -1,10 +1,38 @@
-.mat-form-field {
-    width: 100% !important;
-    margin-top: 18px;
+.b_searchboxForm {
+    background-color: #fff;
+    border: 1px #ccc solid;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,.3);
+    position: relative;
     display: block;
+    zoom: 1;
+    margin-top: 20px;
 }
 
-/* .b_searchboxSubmit {
+.b_searchbox {
+    background-color: #fff;
+    margin: 6px 1px 0 10px;
+    width: calc(100% - 70px);
+    border-right: 0;
+    padding-right: 4px;
+
+    border: 0;
+    padding: 0 10px 0 0;
+    max-height: 30px;
+    outline: none;
+
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    
+    border-color: #ccc;
+    box-sizing: content-box;
+    position: relative;
+    height: 40px;
+    font-size: 16px;
+}
+
+.b_searchboxSubmit {
     height: 45px;
     width: 45px;
     border: 8px solid #fff;
@@ -12,12 +40,15 @@
     background-position: -169px -63px;
     overflow: hidden;
     vertical-align: top;
+    text-indent: -99em;
+    position: static;
     right: 0;
-    position: absolute;
-} */
+    top: 0;
+    cursor: pointer;
+}
 
 .dropdown-box {
-    margin-top: -35px;
+    margin-top: -15px;
     width: 100%;
     position: relative;
     z-index: 100;
@@ -33,7 +64,7 @@
 .dropdown-box ul li {
     line-height: 30px;
     background: white;
-    padding: 3px;
+    padding: 4px 11px 0;
     cursor: pointer;
 }
 

@@ -38,7 +38,7 @@ export class SearchinputComponent implements OnInit {
       let container = $('.dropdown-box')[0];
 
       if($.contains(container, e.target) === false 
-        && $(e.target).is('.mat-input-element') === false 
+        && $(e.target).is('.b_searchbox') === false 
         && $(e.target).is('.remove') === false) {
         mythis.showDropDown = false;
       }
@@ -84,6 +84,17 @@ export class SearchinputComponent implements OnInit {
         this.getAutoSuggestData();
         break;
     }
+  }
+
+  clickSearchIcon() {
+
+    if(this.query === '')
+      return;
+
+    this.showDropDown = false;
+    this.inputedQuery = this.query;
+    this.startSearch();
+    this.getAutoSuggestData();
   }
 
   selectPreviousItem() {
@@ -145,7 +156,11 @@ export class SearchinputComponent implements OnInit {
   }
 
   itemClick(e) {
-    let index = $('.dropdown-box li').index($(e.target).parent());
+    let index = $('.dropdown-box li').index($(e.target).parents("li.dropdown-item"));
+    console.log($('.dropdown-box li'));
+    console.log($(e.target));
+    console.log($(e.target).parents("li.dropdown-item"));
+    console.log(index);
     if(index > -1 && index < this.items.length) {
       this.setActive(index);
       this.showDropDown = false;
