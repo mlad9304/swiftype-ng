@@ -3,6 +3,8 @@ import { SharedService } from '../../services/shared.service';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { query } from '@angular/animations';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +12,8 @@ import { query } from '@angular/animations';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+
+  headers: string[] = ['web', 'map', 'secure', 'savedsearch', 'savedresult'];
 
   activeLinkIndex = 0;
 
@@ -22,12 +26,18 @@ export class HeaderComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     public authService: AuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
+    private location: Location
   ) {
-
+    router.events.subscribe((val) => {
+      let path = location.path().substr(1);
+      this.activeLinkIndex = this.headers.indexOf(path);
+    })
   }
 
   ngOnInit() {
+
     this.authService.getProfile((err, profile) => {
       if(profile) {
         this.isLogged = true;
@@ -60,7 +70,26 @@ export class HeaderComponent implements OnInit {
 
   goto(index) {
     this.activeLinkIndex = index;
-    this.sharedService.gotoEmitter(this.activeLinkIndex);
+
+    switch(index) {
+      case 0:
+        this.router.navigate(['web']);
+        break;
+      case 1:
+        this.router.navigate(['map']);
+        break;
+      case 2:
+        this.router.navigate(['secure']);
+        break;
+      case 3:
+        this.router.navigate(['savedsearch']);
+        break;
+      case 4:
+        this.router.navigate(['savedresult']);
+        break;
+
+    }
+
   }
 
   logout() {

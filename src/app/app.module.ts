@@ -29,10 +29,20 @@ import { GooglemapComponent } from './components/googlemap/googlemap.component';
 import { GooglemapService } from './services/googlemap.service';
 import { SearchinputComponent } from './components/searchinput/searchinput.component';
 import { AutosuggestService } from './services/autosuggest.service';
+import { WebComponent } from './components/web/web.component';
+import { MapComponent } from './components/map/map.component';
+import { SecureComponent } from './components/secure/secure.component';
+import { SavedsearchComponent } from './components/savedsearch/savedsearch.component';
+import { SavedresultComponent } from './components/savedresult/savedresult.component';
 
 const appRoutes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'callback', component: CallbackComponent }
+  { path: '', redirectTo: 'web', pathMatch: 'full' },
+  { path: 'callback', component: CallbackComponent },
+  { path: 'web', component: WebComponent },
+  { path: 'map', component: MapComponent },
+  { path: 'secure', component: SecureComponent },
+  { path: 'savedsearch', component: SavedsearchComponent },
+  { path: 'savedresult', component: SavedresultComponent }
 ]
 
 @NgModule({
@@ -45,7 +55,12 @@ const appRoutes: Routes = [
     CallbackComponent,
     ProfileDialog,
     GooglemapComponent,
-    SearchinputComponent
+    SearchinputComponent,
+    WebComponent,
+    MapComponent,
+    SecureComponent,
+    SavedsearchComponent,
+    SavedresultComponent
   ],
   entryComponents: [
     ProfileDialog

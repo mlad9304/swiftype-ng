@@ -10,10 +10,10 @@
           [matMenuTriggerFor]="navMenu"
         ><i class="fa fa-bars"></i></button>
         <mat-menu #navMenu="matMenu">
-          <button mat-menu-item (click)="goto(2)">
+          <button mat-menu-item (click)="goto(3)">
               Saved Searches
           </button>
-          <button mat-menu-item (click)="goto(3)">
+          <button mat-menu-item (click)="goto(4)">
               Saved Results
           </button>
           <button mat-menu-item (click)="profile()">
@@ -66,6 +66,7 @@
         <app-searchinput></app-searchinput>
         
         <nav mat-tab-nav-bar class="global-navbar">
+          
           <a mat-tab-link
             [active]="activeLinkIndex === 0"
             (click)="goto(0)"
@@ -79,29 +80,28 @@
             Map
           </a>
           <a mat-tab-link
-            [active]="activeLinkIndex === 4"
-            (click)="goto(4)"
+            [active]="activeLinkIndex === 2"
+            (click)="goto(2)"
           >
             Secure
           </a>
           <div class="saved navbar-spacer" *ngIf="isLogged">|</div>
-          <a mat-tab-link
-            [active]="activeLinkIndex === 2"
-            (click)="goto(2)"
-            *ngIf="isLogged"
-            class="saved"
-          >
-            Saved Searches
-          </a>
           <a mat-tab-link
             [active]="activeLinkIndex === 3"
             (click)="goto(3)"
             *ngIf="isLogged"
             class="saved"
           >
+            Saved Searches
+          </a>
+          <a mat-tab-link
+            [active]="activeLinkIndex === 4"
+            (click)="goto(4)"
+            *ngIf="isLogged"
+            class="saved"
+          >
             Saved Results
           </a>
-          <router-outlet></router-outlet>
         </nav>
       </form>
                   

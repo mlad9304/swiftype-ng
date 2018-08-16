@@ -157,10 +157,7 @@ export class SearchinputComponent implements OnInit {
 
   itemClick(e) {
     let index = $('.dropdown-box li').index($(e.target).parents("li.dropdown-item"));
-    console.log($('.dropdown-box li'));
-    console.log($(e.target));
-    console.log($(e.target).parents("li.dropdown-item"));
-    console.log(index);
+
     if(index > -1 && index < this.items.length) {
       this.setActive(index);
       this.showDropDown = false;
