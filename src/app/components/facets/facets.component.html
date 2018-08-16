@@ -3,7 +3,7 @@
       keyboard_arrow_left
   </i>
 </div>
-<div class="facet-container" *ngIf="isNotEmptyFacets && !isGoogleMap">
+<div class="facet-container" *ngIf="isNotEmptyFacets && !isMap">
   <div class="facet-header">
       <span>Categories</span>
   </div>
@@ -18,7 +18,7 @@
       </div>
   </div>
 </div>
-<div class="facet-container" *ngIf="isNotEmptyFacets && !isGoogleMap">
+<div class="facet-container" *ngIf="isNotEmptyFacets && !isMap">
   <div class="facet-header">
       <span>Multi Select Categories</span>
   </div>
@@ -30,7 +30,7 @@
       </div>
   </div>
 </div>
-<div class="facet-container" *ngIf="isNotEmptyFacets && isGoogleMap">
+<div class="facet-container" *ngIf="isNotEmptyFacets && isMap">
     <div class="facet-header">
         <span>Locations</span>
     </div>

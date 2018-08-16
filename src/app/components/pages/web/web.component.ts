@@ -10,6 +10,8 @@ export class WebComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+    console.log('web comp');
   }
 
 }

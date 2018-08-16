@@ -40,7 +40,11 @@
     visibility: hidden
 }
 
-.facets {
+:host ::ng-deep .component-container {
+    display: flex !important;
+}
+
+:host ::ng-deep .facets {
     display: block;
     width: 300px;
     min-height: 200px;
@@ -48,7 +52,7 @@
 }
 
 @media (max-width:960px) {
-    .facets {
+    :host ::ng-deep .facets {
         position: absolute;
         z-index: 2;
         background-color: #fff;
@@ -71,14 +75,14 @@
         transition: all .23s ease-out
     }
 
-    .s-sidebar__trigger {
+    :host ::ng-deep .s-sidebar__trigger {
         position: absolute;
         width: 50px;
         height: 50px;
         background-color: rgba(34, 34, 34, .45)
     }
 
-    .s-sidebar__trigger.active+.facets {
+    :host ::ng-deep .s-sidebar__trigger.active+.facets {
         -webkit-transform: translate(0);
         -moz-transform: translate(0);
         -ms-transform: translate(0);
@@ -87,7 +91,7 @@
         opacity: 1;
         visibility: visible
     }
-    .s-sidebar__trigger {
+    :host ::ng-deep .s-sidebar__trigger {
         z-index: 2;
         left: 0;
         border-left: none;
@@ -96,11 +100,11 @@
         padding-top: 10px;
         color: #ecf4f9
     }
-    .s-sidebar__trigger.scrolling {
+    :host ::ng-deep .s-sidebar__trigger.scrolling {
         visibility: hidden
     }
 }
 
-.results-container {
+:host ::ng-deep .results-container {
     width: 100%
 }

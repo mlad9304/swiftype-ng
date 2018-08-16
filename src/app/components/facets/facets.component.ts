@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 import { environment } from '../../../environments/environment';
 
@@ -13,7 +13,8 @@ declare var $: any;
 export class FacetsComponent implements OnInit {
 
   isNotEmptyFacets = false;
-  isGoogleMap = false;
+
+  @Input() isMap: boolean;
 
   facets: any[] = [];
   multiFacetsData: any = {};
@@ -60,16 +61,6 @@ export class FacetsComponent implements OnInit {
       
 
     })
-
-    this.sharedService.goto.subscribe(index => {
-      if(index === 1) {
-        this.isGoogleMap = true;
-      } else {
-        this.isGoogleMap = false;
-      }
-        
-      this.initFacets();
-    });
 
     this.sharedService.changedQuery.subscribe(query => {
       this.initFacets();

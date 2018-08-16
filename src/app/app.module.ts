@@ -35,7 +35,6 @@ import { GooglemapService } from './services/googlemap.service';
 import { SearchinputComponent } from './components/searchinput/searchinput.component';
 import { AutosuggestService } from './services/autosuggest.service';
 
-
 const appRoutes: Routes = [
   { path: '', redirectTo: 'web', pathMatch: 'full' },
   { path: 'callback', component: CallbackComponent },
@@ -61,7 +60,7 @@ const appRoutes: Routes = [
     MapComponent,
     SecureComponent,
     SavedsearchComponent,
-    SavedresultComponent
+    SavedresultComponent,
   ],
   entryComponents: [
     ProfileDialog
