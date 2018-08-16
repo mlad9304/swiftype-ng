@@ -24,13 +24,19 @@ export class FacetsComponent implements OnInit {
   isMultiFacetSelect: boolean = false;
   selectedMultiFacets: string[] = [];
 
+  changedFacetsSubscriber;
+  setGoogleFacetsSubscriber;
+  changedQuerySubscriber;
+  setMultiFacetsDataSubscriber;
+
+
   constructor(
     private sharedService: SharedService
   ) { }
 
   ngOnInit() {
 
-    this.sharedService.changedFacets.subscribe(facets => {
+    this.changedFacetsSubscriber = this.sharedService.changedFacets.subscribe(facets => {
 
       this.facets = facets;
 
@@ -46,7 +52,7 @@ export class FacetsComponent implements OnInit {
       $("div.facet-container").find(".facet-option[data-facet-value='all']").addClass('selected');
     });
 
-    this.sharedService.setGoogleFacets.subscribe(facets => {
+    this.setGoogleFacetsSubscriber = this.sharedService.setGoogleFacets.subscribe(facets => {
 
       this.facets = facets;
 
@@ -62,11 +68,11 @@ export class FacetsComponent implements OnInit {
 
     })
 
-    this.sharedService.changedQuery.subscribe(query => {
+    this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       this.initFacets();
     });
 
-    this.sharedService.setMultiFacetsData.subscribe(facets => {
+    this.setMultiFacetsDataSubscriber = this.sharedService.setMultiFacetsData.subscribe(facets => {
       this.isMultiFacetSelect = true;
       this.selectedMultiFacets = facets;
       this.multiFacetsData = {};
@@ -106,8 +112,10 @@ export class FacetsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('Facet Destroy');
-    delete this.sharedService;
+    this.changedFacetsSubscriber.unsubscribe();
+    this.setGoogleFacetsSubscriber.unsubscribe();
+    this.changedQuerySubscriber.unsubscribe();
+    this.setMultiFacetsDataSubscriber.unsubscribe();
   }
 
   initFacets() {

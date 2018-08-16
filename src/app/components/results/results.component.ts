@@ -67,6 +67,12 @@ export class ResultsComponent implements OnInit {
     "April", "May", "June", "July", "August", "September", 
     "October", "November", "December"]; 
 
+  logoutSubscriber;
+  changedQuerySubscriber;
+  selectSingleFacetSubscriber;
+  selectMultiFacetsSubscriber;
+
+
   constructor(
     private sharedService: SharedService,
     private searchService: SearchService,
@@ -88,11 +94,11 @@ export class ResultsComponent implements OnInit {
       }
     });
 
-    this.authService.logout.subscribe(data => {
+    this.logoutSubscriber = this.authService.logout.subscribe(data => {
       this.isLogged = false;
     });
 
-    this.sharedService.changedQuery.subscribe(query => {
+    this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
 
       this.page = 0;
@@ -112,7 +118,7 @@ export class ResultsComponent implements OnInit {
         this.searchSwiftype();
     });
 
-    this.sharedService.selectSingleFacet.subscribe(facet => {
+    this.selectSingleFacetSubscriber = this.sharedService.selectSingleFacet.subscribe(facet => {
       const { isFacetFilter, selectedFacetValue } = facet;
 
       this.isFacetFilter = isFacetFilter;
@@ -125,7 +131,7 @@ export class ResultsComponent implements OnInit {
       this.searchSwiftype(false);
     });
 
-    this.sharedService.selectMultiFacets.subscribe(facets => {
+    this.selectMultiFacetsSubscriber = this.sharedService.selectMultiFacets.subscribe(facets => {
       const { selectedMultiFacets } = facets;
 
       this.selectedFacets = selectedMultiFacets;
@@ -184,6 +190,13 @@ export class ResultsComponent implements OnInit {
     });
 
     this.responsive();
+  }
+
+  ngOnDestroy() {
+    this.logoutSubscriber.unsubscribe();
+    this.changedQuerySubscriber.unsubscribe();
+    this.selectSingleFacetSubscriber.unsubscribe();
+    this.selectMultiFacetsSubscriber.unsubscribe();
   }
 
   private responsive() {

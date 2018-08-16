@@ -23,6 +23,10 @@ export class HeaderComponent implements OnInit {
 
   query: string = "";
 
+  changedQuerySubscriber;
+  setNavIndexSubscriber;
+
+
   constructor(
     private sharedService: SharedService,
     public authService: AuthService,
@@ -46,15 +50,20 @@ export class HeaderComponent implements OnInit {
       }
     });
 
-    this.sharedService.changedQuery.subscribe(query => {
+    this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       if(this.activeLinkIndex === 1 || this.activeLinkIndex === 4)
         return;
       this.activeLinkIndex = 0; //Web
     });
 
-    this.sharedService.setNavIndex.subscribe(index => {
+    this.setNavIndexSubscriber = this.sharedService.setNavIndex.subscribe(index => {
       this.activeLinkIndex = index;
     })
+  }
+
+  ngOnDestroy() {
+    this.changedQuerySubscriber.unsubscribe();
+    this.setNavIndexSubscriber.unsubscribe();
   }
 
   profile() {
