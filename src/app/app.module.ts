@@ -18,7 +18,12 @@ import {
 import {FlexLayoutModule, MediaService} from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/pages/home/home.component';
+import { WebComponent } from './components/pages/web/web.component';
+import { MapComponent } from './components/pages/map/map.component';
+import { SecureComponent } from './components/pages/secure/secure.component';
+import { SavedsearchComponent } from './components/pages/savedsearch/savedsearch.component';
+import { SavedresultComponent } from './components/pages/savedresult/savedresult.component';
 import { HeaderComponent, ProfileDialog } from './components/header/header.component';
 import { FacetsComponent } from './components/facets/facets.component';
 import { ResultsComponent } from './components/results/results.component';
@@ -29,11 +34,7 @@ import { GooglemapComponent } from './components/googlemap/googlemap.component';
 import { GooglemapService } from './services/googlemap.service';
 import { SearchinputComponent } from './components/searchinput/searchinput.component';
 import { AutosuggestService } from './services/autosuggest.service';
-import { WebComponent } from './components/web/web.component';
-import { MapComponent } from './components/map/map.component';
-import { SecureComponent } from './components/secure/secure.component';
-import { SavedsearchComponent } from './components/savedsearch/savedsearch.component';
-import { SavedresultComponent } from './components/savedresult/savedresult.component';
+
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'web', pathMatch: 'full' },
