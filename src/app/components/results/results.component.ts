@@ -363,7 +363,7 @@ export class ResultsComponent implements OnInit {
       return;
 
     this.searchService.searchSecure(this.query, this.from, this.size, this.categorySize).subscribe(data => {
-console.log(data);
+
       const { hits, total } = data.hits;
 
 

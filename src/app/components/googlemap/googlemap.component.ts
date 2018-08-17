@@ -17,6 +17,9 @@ export class GooglemapComponent implements OnInit {
   isGoogleMap: boolean = true;
   query: string = "";
 
+  changedQuerySubscriber;
+  selectGoogleFacetSubscriber;
+
   constructor(
     private sharedService: SharedService,
     private googlemapService: GooglemapService
@@ -24,7 +27,7 @@ export class GooglemapComponent implements OnInit {
 
   ngOnInit() {
 
-    this.sharedService.changedQuery.subscribe(query => {
+    this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
       if(this.isGoogleMap)
         this.searchOfficePos();
@@ -42,9 +45,14 @@ export class GooglemapComponent implements OnInit {
       
     });
 
-    this.sharedService.selectGoogleFacet.subscribe(pos => {
+    this.selectGoogleFacetSubscriber = this.sharedService.selectGoogleFacet.subscribe(pos => {
       this.drawRoute(pos);
     });
+  }
+
+  ngOnDestroy() {
+    this.changedQuerySubscriber.unsubscribe();
+    this.selectGoogleFacetSubscriber.unsubscribe();
   }
 
   searchOfficePos() {

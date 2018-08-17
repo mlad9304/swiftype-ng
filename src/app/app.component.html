@@ -6,7 +6,9 @@
       <i class="s-sidebar__trigger material-icons md-28" *ngIf="!isMySavedSearches">
         keyboard_arrow_right
       </i>
-      <router-outlet></router-outlet>
+      <div style="width:100%">
+        <router-outlet></router-outlet>
+      </div>
       <!-- <app-facets class="facets" [ngClass]="{hide: isMySavedSearches}"></app-facets>
       <app-results class="results-container"></app-results> -->
     </div>

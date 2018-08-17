@@ -42,6 +42,7 @@
 
 :host ::ng-deep .component-container {
     display: flex !important;
+    height: 100%;
 }
 
 :host ::ng-deep .facets {
