@@ -30,7 +30,6 @@ import { ResultsComponent } from './components/results/results.component';
 import { CallbackComponent } from './components/callback/callback.component';
 
 import { SharedService } from './services/shared.service';
-import { GooglemapComponent } from './components/googlemap/googlemap.component';
 import { GooglemapService } from './services/googlemap.service';
 import { SearchinputComponent } from './components/searchinput/searchinput.component';
 import { AutosuggestService } from './services/autosuggest.service';
@@ -54,7 +53,6 @@ const appRoutes: Routes = [
     ResultsComponent,
     CallbackComponent,
     ProfileDialog,
-    GooglemapComponent,
     SearchinputComponent,
     WebComponent,
     MapComponent,

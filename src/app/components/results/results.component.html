@@ -1,5 +1,4 @@
-<app-googlemap [ngClass]="{hide: !isGoogleMap}"></app-googlemap>
-<div *ngIf="!isMySavedSearches && !isGoogleMap">
+<div *ngIf="!isMySavedSearches">
     <div>
         <div *ngIf="isNotEmptyRecords" class="search-summary">
             <div class="search-summary-label" *ngIf="isMySaves">
@@ -75,7 +74,7 @@
         <span class="next_page" [ngClass]="{disabled: isInvalidNextPage}" (click)="nextPage()">Next</span>
     </div>
 </div>
-<div *ngIf="isMySavedSearches && !isGoogleMap">
+<div *ngIf="isMySavedSearches">
     <div *ngIf="isNotEmptyRecords_savedsearches" class="search-summary">
         <div class="search-summary-label">
             Saved searches <strong [innerHtml]="page_row_count_summary_savedsearches"></strong> of <strong [innerHtml]="total_savedsearches"></strong>

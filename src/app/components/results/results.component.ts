@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {MediaChange, ObservableMedia, MediaService} from '@angular/flex-layout';
 import { SharedService } from '../../services/shared.service';
 import { SearchService } from '../../services/search.service';
@@ -23,8 +23,8 @@ export class ResultsComponent implements OnInit {
   isMySavedSearches: boolean = false;
   isSaved: boolean = false;
   isSavedSearches: boolean = false;
-  isGoogleMap: boolean = false;
-  isSecure: boolean = false;
+
+  @Input() isSecure: boolean;
 
   query: string = "";
 
@@ -109,9 +109,6 @@ export class ResultsComponent implements OnInit {
       this.isMySaves = false;
       this.isMySavedSearches = false;
 
-      if(this.isGoogleMap) {
-        return;
-      }        
       if(this.isSecure)
         this.searchSecure();
       else
@@ -148,48 +145,6 @@ export class ResultsComponent implements OnInit {
       this.searchSwiftype(false);
     });
 
-    this.sharedService.goto.subscribe(index => {
-      this.page = 0;
-      this.from = 0;
-      this.isFacetFilter = false;
-      this.selectedFacets = [];
-      this.isSavedSearches = false;
-
-      this.from_savedsearches = 0;
-      if(index === 1) {
-        this.isGoogleMap = true;
-        return;
-      } else {
-        this.isGoogleMap = false;
-      }
-
-      if(index === 2) { // Saved Searches
-        this.isMySavedSearches = true;
-        this.searchSavedSearches();
-        return;
-      } else {
-        this.isMySavedSearches = false;
-      }
-
-      if(index === 3) { // Saved Results
-        this.isMySaves = true;
-      } else {
-        this.isMySaves = false;
-      }
-
-      if(index === 4) { // Secure
-        this.isSecure = true;
-        this.searchSecure();
-        return;
-      } else {
-        this.isSecure = false;
-      }
-
-      this.searchSwiftype();
-
-    });
-
-    this.responsive();
   }
 
   ngOnDestroy() {
