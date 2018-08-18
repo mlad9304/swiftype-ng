@@ -16,8 +16,8 @@ declare var $: any;
 })
 export class ResultsComponent implements OnInit {
 
-  @Input() isLogged: boolean = false;
-  @Input() user: string = "";
+  isLogged: boolean = false;
+  user: string = "";
 
   @Input() isMySaves: boolean = false;
   @Input() isMySavedSearches: boolean = false;
@@ -67,6 +67,7 @@ export class ResultsComponent implements OnInit {
     "April", "May", "June", "July", "August", "September", 
     "October", "November", "December"]; 
 
+  logoutSubscriber;
   changedQuerySubscriber;
   selectSingleFacetSubscriber;
   selectMultiFacetsSubscriber;
@@ -85,6 +86,17 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.authService.getProfile((err, profile) => {
+      if(profile) {
+        this.isLogged = true;
+        this.user = profile.sub.substr(6);
+      }
+    });
+
+    this.logoutSubscriber = this.authService.logout.subscribe(data => {
+      this.isLogged = false;
+    });
 
     this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
@@ -136,7 +148,7 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    
+    this.logoutSubscriber.unsubscribe();
     this.changedQuerySubscriber.unsubscribe();
     this.selectSingleFacetSubscriber.unsubscribe();
     this.selectMultiFacetsSubscriber.unsubscribe();
@@ -286,8 +298,8 @@ export class ResultsComponent implements OnInit {
     this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
   }
 
-  searchSavedSearches() {
-    this.searchService.searchSavedSearches(this.user, this.from_savedsearches, this.size_savedsearches).subscribe(data => {
+  searchSavedSearches(user) {
+    this.searchService.searchSavedSearches(user, this.from_savedsearches, this.size_savedsearches).subscribe(data => {
       const { hits, total } = data.hits;
 
       this.hits_savedsearches = hits;
@@ -358,11 +370,11 @@ export class ResultsComponent implements OnInit {
 
   prevPageSavedsearches() {
     this.from_savedsearches -= this.size_savedsearches;
-    this.searchSavedSearches();
+    this.searchSavedSearches(this.user);
   }
   nextPageSavedsearches() {
     this.from_savedsearches += this.size_savedsearches;
-    this.searchSavedSearches();
+    this.searchSavedSearches(this.user);
   }
 
   viewSearches(item) {

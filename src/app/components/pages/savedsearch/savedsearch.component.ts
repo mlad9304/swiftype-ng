@@ -11,9 +11,6 @@ export class SavedsearchComponent implements OnInit {
 
   @ViewChild(ResultsComponent) result:ResultsComponent;
 
-  isLogged: boolean = false;
-  user: string = "";
-
   logoutSubscriber;
 
   constructor(
@@ -28,22 +25,17 @@ export class SavedsearchComponent implements OnInit {
     this.authService.getProfile((err, profile) => {
       
       if(profile) {
-        this.isLogged = true;
-        this.user = profile.sub.substr(6);
-        console.log(this.user);
-        this.result.searchSavedSearches();
+        let user = profile.sub.substr(6);
+        this.result.searchSavedSearches(user);
       }
     });
 
-    this.logoutSubscriber = this.authService.logout.subscribe(data => {
-      this.isLogged = false;
-    });
 
     
   }
 
   ngOnDestroy() {
-    this.logoutSubscriber.unsubscribe();
+    
   }
 
 }
