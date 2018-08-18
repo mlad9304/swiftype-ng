@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-web',
@@ -7,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WebComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private sharedService:SharedService
+  ) { }
 
   ngOnInit() {
 
+  }
+
+  ngAfterViewInit() {
+    this.sharedService.recallChangedQueryEmitter();
   }
 
 }

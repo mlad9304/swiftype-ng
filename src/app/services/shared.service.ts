@@ -6,6 +6,7 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 export class SharedService {
 
   @Output() changedQuery: EventEmitter<string> = new EventEmitter();
+  @Output() recallChangedQuery: EventEmitter<string> = new EventEmitter();
   @Output() setQuery: EventEmitter<string> = new EventEmitter();
   @Output() changedFacets: EventEmitter<any[]> = new EventEmitter();
   @Output() setGoogleFacets: EventEmitter<any[]> = new EventEmitter();
@@ -22,6 +23,10 @@ export class SharedService {
 
   changedQueryEmitter(query) {
     this.changedQuery.emit(query);
+  }
+
+  recallChangedQueryEmitter() {
+    this.recallChangedQuery.emit();
   }
 
   setQueryEmitter(query) {

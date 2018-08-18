@@ -19,6 +19,8 @@ export class SearchinputComponent implements OnInit {
   showDropDown: boolean = false;
   queries: string[] = [];
 
+  recallChangedQuerySubscriber;
+
   constructor(
     private sharedService: SharedService,
     private autoSuggestService: AutosuggestService
@@ -28,6 +30,10 @@ export class SearchinputComponent implements OnInit {
 
     this.readQueries();
 
+    this.recallChangedQuerySubscriber = this.sharedService.recallChangedQuery.subscribe(() => {
+      if(this.query != "")
+        this.sharedService.changedQueryEmitter(this.query);
+    })
     this.sharedService.setQuery.subscribe(query => {
       this.query = query;
     });
@@ -45,6 +51,10 @@ export class SearchinputComponent implements OnInit {
         
     });
     
+  }
+
+  ngOnDestroy() {
+    this.recallChangedQuerySubscriber.unsubscribe();
   }
 
   readQueries() {

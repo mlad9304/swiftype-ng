@@ -37,6 +37,10 @@ export class MapComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.sharedService.recallChangedQueryEmitter();
+  }
+
   ngOnDestroy() {
     this.changedQuerySubscriber.unsubscribe();
     this.selectGoogleFacetSubscriber.unsubscribe();
