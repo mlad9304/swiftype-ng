@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
 
+  @Output() logged: EventEmitter<any> = new EventEmitter();
   @Output() logout: EventEmitter<any> = new EventEmitter();
 
   auth0 = new auth0.WebAuth({
@@ -36,6 +37,11 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
+
+        this.logged.emit({
+          isLogged: true
+        });
+
         this.router.navigate(['/']);
       } else if (err) {
         this.router.navigate(['/']);

@@ -85,11 +85,11 @@
           >
             Secure
           </a>
-          <div class="saved navbar-spacer" *ngIf="isLogged">|</div>
+          <div class="saved navbar-spacer" *ngIf="authService.isAuthenticated()">|</div>
           <a mat-tab-link
             [active]="activeLinkIndex === 3"
             (click)="goto(3)"
-            *ngIf="isLogged"
+            *ngIf="authService.isAuthenticated()"
             class="saved"
           >
             Saved Searches
@@ -97,7 +97,7 @@
           <a mat-tab-link
             [active]="activeLinkIndex === 4"
             (click)="goto(4)"
-            *ngIf="isLogged"
+            *ngIf="authService.isAuthenticated()"
             class="saved"
           >
             Saved Results

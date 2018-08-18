@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
 
   query: string = "";
 
+  loggedSubscriber;
   changedQuerySubscriber;
   setNavIndexSubscriber;
 
@@ -41,14 +42,12 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.authService.getProfile((err, profile) => {
-      if(profile) {
-        this.isLogged = true;
-        this.nickname = profile.nickname;
-        this.email = profile.name;
-      }
+    
+    this.loggedSubscriber = this.authService.logged.subscribe(isLogged => {
+      this.getProfile();
     });
+
+    this.getProfile();
 
     this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       if(this.activeLinkIndex === 1 || this.activeLinkIndex === 2)
@@ -62,8 +61,19 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.loggedSubscriber.unsubscribe();
     this.changedQuerySubscriber.unsubscribe();
     this.setNavIndexSubscriber.unsubscribe();
+  }
+
+  getProfile() {
+    this.authService.getProfile((err, profile) => {
+      if(profile) {
+        this.isLogged = true;
+        this.nickname = profile.nickname;
+        this.email = profile.name;
+      }
+    });
   }
 
   profile() {
