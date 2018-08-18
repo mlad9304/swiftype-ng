@@ -83,7 +83,7 @@
         background-color: rgba(34, 34, 34, .45)
     }
 
-    :host ::ng-deep .s-sidebar__trigger.active+.facets {
+    :host ::ng-deep .s-sidebar__trigger.active + div .facets {
         -webkit-transform: translate(0);
         -moz-transform: translate(0);
         -ms-transform: translate(0);

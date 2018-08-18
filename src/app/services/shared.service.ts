@@ -16,6 +16,7 @@ export class SharedService {
   @Output() setMultiFacetsData: EventEmitter<any> = new EventEmitter();
   @Output() goto: EventEmitter<number> = new EventEmitter();
   @Output() setNavIndex: EventEmitter<number> = new EventEmitter();
+  @Output() activateSavedSearchsFacets: EventEmitter<any> = new EventEmitter();
 
   constructor() { 
     
@@ -63,5 +64,9 @@ export class SharedService {
 
   setNavIndexEmitter(index) {
     this.setNavIndex.emit(index);
+  }
+
+  activateSavedSearchsFacetsEmitter() {
+    this.activateSavedSearchsFacets.emit();
   }
 }

@@ -384,6 +384,9 @@ export class ResultsComponent implements OnInit {
   }
 
   viewSearches(item) {
+
+    this.sharedService.activateSavedSearchsFacetsEmitter();
+
     this.query = item._source.query;
     this.sharedService.setQueryEmitter(this.query);
     this.isMultiFacetSelect = item._source.is_multi_facet_select;
@@ -393,8 +396,6 @@ export class ResultsComponent implements OnInit {
     this.isFacetFilter = item._source.categories.length === 0 ? false : true;
     this.isSavedSearches = false;
     this.selectedFacets = item._source.categories;
-
-    this.sharedService.setNavIndexEmitter(0); // Web
 
     this.isMySaves = false;
     this.isMySavedSearches = false;

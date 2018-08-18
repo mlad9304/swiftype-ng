@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit {
 
   goto(index) {
     this.activeLinkIndex = index;
-
+    this.sharedService.gotoEmitter(index);
     switch(index) {
       case 0:
         this.router.navigate(['web']);
