@@ -11,8 +11,6 @@ export class SavedsearchComponent implements OnInit {
 
   @ViewChild(ResultsComponent) result:ResultsComponent;
 
-  logoutSubscriber;
-
   constructor(
     private authService:AuthService
   ) { }
@@ -29,8 +27,6 @@ export class SavedsearchComponent implements OnInit {
         this.result.searchSavedSearches(user);
       }
     });
-
-
     
   }
 

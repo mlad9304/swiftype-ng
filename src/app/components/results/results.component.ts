@@ -174,7 +174,7 @@ export class ResultsComponent implements OnInit {
   }
 
   searchSwiftype(isReplaceReturnedFacets=true, callback=null) {
-  
+
     if(this.isMySaves) {
       if(this.isFacetFilter) {
         this.searchService.searchMySavesWithFacets(this.user, this.from, this.size, this.selectedFacets).subscribe(data => {
@@ -296,6 +296,12 @@ export class ResultsComponent implements OnInit {
     this.page_row_count_summary = `${this.from + 1}-${this.from + this.records.length}`;
     this.isInvalidPrevPage = this.from <= 0;
     this.isInvalidNextPage = (this.from + this.records.length) >= this.total_result_count;
+  }
+
+  searchMySaves(user) {
+    this.searchService.searchMySaves(user, this.from, this.size, this.categorySize).subscribe(data => {
+      this.searchHandler(data, true, null);
+    });
   }
 
   searchSavedSearches(user) {
