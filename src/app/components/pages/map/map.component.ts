@@ -14,7 +14,6 @@ export class MapComponent implements OnInit {
   @ViewChild('gmap') gmapElement: any;
   map: google.maps.Map;
 
-  isGoogleMap: boolean = true;
   query: string = "";
 
   changedQuerySubscriber;
@@ -29,20 +28,8 @@ export class MapComponent implements OnInit {
 
     this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
-      if(this.isGoogleMap)
-        this.searchOfficePos();
+      this.searchOfficePos();
 
-    });
-
-    this.sharedService.goto.subscribe(index => {
-      if(index === 1) {
-        this.isGoogleMap = true;
-        
-        this.searchOfficePos();
-      } else {
-        this.isGoogleMap = false;
-      }
-      
     });
 
     this.selectGoogleFacetSubscriber = this.sharedService.selectGoogleFacet.subscribe(pos => {

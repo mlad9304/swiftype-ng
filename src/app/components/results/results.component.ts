@@ -16,15 +16,15 @@ declare var $: any;
 })
 export class ResultsComponent implements OnInit {
 
-  isLogged: boolean = false;
-  user: string = "";
+  @Input() isLogged: boolean = false;
+  @Input() user: string = "";
 
-  isMySaves: boolean = false;
-  isMySavedSearches: boolean = false;
+  @Input() isMySaves: boolean = false;
+  @Input() isMySavedSearches: boolean = false;
   isSaved: boolean = false;
   isSavedSearches: boolean = false;
 
-  @Input() isSecure: boolean;
+  @Input() isSecure: boolean = false;
 
   query: string = "";
 
@@ -67,7 +67,6 @@ export class ResultsComponent implements OnInit {
     "April", "May", "June", "July", "August", "September", 
     "October", "November", "December"]; 
 
-  logoutSubscriber;
   changedQuerySubscriber;
   selectSingleFacetSubscriber;
   selectMultiFacetsSubscriber;
@@ -86,17 +85,6 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.authService.getProfile((err, profile) => {
-      if(profile) {
-        this.isLogged = true;
-        this.user = profile.sub.substr(6);
-      }
-    });
-
-    this.logoutSubscriber = this.authService.logout.subscribe(data => {
-      this.isLogged = false;
-    });
 
     this.changedQuerySubscriber = this.sharedService.changedQuery.subscribe(query => {
       this.query = query;
@@ -148,7 +136,7 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.logoutSubscriber.unsubscribe();
+    
     this.changedQuerySubscriber.unsubscribe();
     this.selectSingleFacetSubscriber.unsubscribe();
     this.selectMultiFacetsSubscriber.unsubscribe();

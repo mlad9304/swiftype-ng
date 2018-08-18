@@ -14,7 +14,7 @@ export class FacetsComponent implements OnInit {
 
   isNotEmptyFacets = false;
 
-  @Input() isMap: boolean;
+  @Input() isMap: boolean = false;
 
   facets: any[] = [];
   multiFacetsData: any = {};
