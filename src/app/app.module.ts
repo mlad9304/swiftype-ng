@@ -33,6 +33,7 @@ import { SharedService } from './services/shared.service';
 import { GooglemapService } from './services/googlemap.service';
 import { SearchinputComponent } from './components/searchinput/searchinput.component';
 import { AutosuggestService } from './services/autosuggest.service';
+import { AuthGuard } from './guards/auth.guard';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'web', pathMatch: 'full' },
@@ -40,8 +41,8 @@ const appRoutes: Routes = [
   { path: 'web', component: WebComponent },
   { path: 'map', component: MapComponent },
   { path: 'secure', component: SecureComponent },
-  { path: 'savedsearch', component: SavedsearchComponent },
-  { path: 'savedresult', component: SavedresultComponent }
+  { path: 'savedsearch', component: SavedsearchComponent, canActivate:[AuthGuard] },
+  { path: 'savedresult', component: SavedresultComponent, canActivate:[AuthGuard] }
 ]
 
 @NgModule({
@@ -80,7 +81,7 @@ const appRoutes: Routes = [
     MatCardModule,
     FlexLayoutModule
   ],
-  providers: [SharedService, MediaService, GooglemapService, AutosuggestService],
+  providers: [SharedService, MediaService, GooglemapService, AutosuggestService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
