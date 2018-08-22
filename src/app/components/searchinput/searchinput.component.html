@@ -2,7 +2,6 @@
     <input class="b_searchbox" placeholder="Search" [(ngModel)]="query" name="query" (click)="inputClick()" autocomplete="off">
     <input type="submit" class="b_searchboxSubmit" (click)="clickSearchIcon()">
 </div>
-
 <div class="dropdown-box" [ngClass]="{hide: !showDropDown}">
     <ul *ngIf="query != ''">
         <li *ngFor="let item of items; let i = index" class="dropdown-item" (click)="itemClick($event)">
