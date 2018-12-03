@@ -7,12 +7,13 @@ export const environment = {
   AUTH0_CLIENT_ID: 'QtJKA5Os_QRRE4OLaEJ_membY4vElfeo',
   AUTH0_DOMAIN: 'marcoauth0.auth0.com',
   AUTH0_CALLBACK_URL: 'http://localhost:4200/callback',
-  SEARCH_SERVER_URL: 'https://api.swiftype.com/api/v1/public/engines/search?facets[page][]=sections&engine_key=vopzzNb3wEbGPrMNPyvQ',
-  SEARCH_SERVER_URL2: 'https://api.swiftype.com/api/v1/public/engines/search.json',
+  SEARCH_SERVER_URL: 'https://3ovpd2kl2m.execute-api.us-east-2.amazonaws.com/dev/search',
   SEARCH_SECURE: 'http://c47f31d4.ngrok.io/det/_search',
   FACETS_SIZE: 10,
-  ENGINE_KEY: 'vopzzNb3wEbGPrMNPyvQ',
   SERVER_URL_FOR_SAVING: 'https://19d7d779f8a502497d7eed2a5d035771.ap-southeast-2.aws.found.io:9243',
+  SEARCH_MY_SAVES: 'https://3ovpd2kl2m.execute-api.us-east-2.amazonaws.com/dev/mysaves',
+  SEARCH_MY_SEARCHES: 'https://3ovpd2kl2m.execute-api.us-east-2.amazonaws.com/dev/mysearches',
+  SAVE_MY_SEARCHES: 'https://3ovpd2kl2m.execute-api.us-east-2.amazonaws.com/dev/mysearches/save',
   layout: 'google', // google or card
   BING_AUTOSUGGEST_API_URL: 'https://api.cognitive.microsoft.com/bing/v7.0/suggestions',
   BING_AUTOSUGGEST_API_KEY: 'c4bad504fe504930a095097d23a34502'
